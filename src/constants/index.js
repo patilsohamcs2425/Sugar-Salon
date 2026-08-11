@@ -7,14 +7,13 @@ export const SALON_INFO = {
   email: "contact@sugarsalon.in",
   address: "Shop No C-28, Zenith CHS LTD, Marol Maroshi Rd, near T2 International Airport, Bhavani Nagar, Marol, Andheri East, Mumbai, Maharashtra 400059",
   shortLocation: "Marol, Andheri East, Mumbai (Near T2 Airport)",
-  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Sugar+Salon+Marol+Andheri+East+Mumbai",
+  googleMapsUrl: "https://maps.app.goo.gl/mRfq4U3SeNTz8zmv8",
   hours: [
     { days: "Monday - Sunday (7 Days)", time: "11:00 AM - 9:00 PM" }
   ],
   socials: {
-    instagram: "https://instagram.com/sugarsalonmarol",
-    facebook: "https://facebook.com/sugarsalonmarol",
-    googleMaps: "https://www.google.com/maps/search/?api=1&query=Sugar+Salon+Marol+Andheri+East+Mumbai"
+    instagram: "https://www.instagram.com/sugarsalon.unisex?igsh=MWJzcmllMXlpYjM2dg==",
+    googleMaps: "https://maps.app.goo.gl/mRfq4U3SeNTz8zmv8"
   }
 };
 
