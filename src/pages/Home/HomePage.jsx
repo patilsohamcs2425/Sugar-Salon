@@ -34,21 +34,21 @@ export const HomePage = () => {
     <div className="space-y-24">
       {/* Hero Section */}
       <section className="relative pt-12 pb-20 overflow-hidden">
-        {/* Glow ambient backdrops */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-pink-600/20 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+        {/* Glow ambient backdrops matching logo gold */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-amber-500/15 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-yellow-600/10 rounded-full blur-[130px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-semibold mb-6 backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-6 backdrop-blur-md">
                 <Sparkles size={14} className="text-amber-400" />
-                <span>Premier Organic Sugar Salon in Marol, Andheri East</span>
+                <span>Premier Unisex Organic Sugar Salon in Marol, Mumbai</span>
               </div>
 
               <h1 className="text-4xl sm:text-6xl font-extrabold font-serif-heading text-slate-100 tracking-tight leading-[1.15] mb-6">
                 Unveil Your <br />
-                <span className="gradient-text-pink">Natural Radiance</span> <br />
+                <span className="gradient-text-gold">Natural Radiance</span> <br />
                 With Sugar Waxing.
               </h1>
 

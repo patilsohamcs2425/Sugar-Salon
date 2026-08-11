@@ -49,12 +49,12 @@ export const Navbar = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         scrolled
-          ? "bg-slate-950/95 backdrop-blur-xl border-b border-pink-500/20 py-2.5 shadow-xl"
+          ? "bg-[#0b090e]/95 backdrop-blur-xl border-b border-amber-500/25 py-2.5 shadow-2xl shadow-amber-950/20"
           : "bg-transparent py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Top-Left Logo Image (No text beside it as requested) */}
+        {/* Top-Left Logo Image */}
         <Link to="/" className="flex items-center group">
           <div className="relative h-12 sm:h-14 flex items-center group-hover:scale-105 transition-transform">
             {logoLoaded ? (
@@ -62,10 +62,10 @@ export const Navbar = () => {
                 src={logoPng || logoSvg}
                 alt="Sugar Salon Logo"
                 onError={() => setLogoLoaded(false)}
-                className="h-full w-auto object-contain max-w-[200px]"
+                className="h-full w-auto object-contain max-w-[200px] drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]"
               />
             ) : (
-              <div className="h-11 px-4 bg-gradient-to-r from-pink-500 to-rose-600 rounded-2xl flex items-center gap-2 text-white font-bold font-serif-heading">
+              <div className="h-11 px-4 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-2xl flex items-center gap-2 text-slate-950 font-bold font-serif-heading border border-amber-300">
                 <Sparkles size={18} /> Sugar Salon
               </div>
             )}
@@ -73,7 +73,7 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
+        <nav className="hidden lg:flex items-center gap-1 bg-[#120e15]/80 p-1.5 rounded-full border border-amber-500/20 backdrop-blur-md">
           {NAV_LINKS.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -83,13 +83,13 @@ export const Navbar = () => {
                 onClick={(e) => handleNavClick(e, link)}
                 className={`relative px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 ${
                   isActive
-                    ? "text-pink-300 bg-pink-500/20 border border-pink-500/30 shadow-md"
-                    : "text-slate-300 hover:text-pink-300 hover:bg-slate-800/50"
+                    ? "text-amber-300 bg-amber-500/20 border border-amber-500/40 shadow-md shadow-amber-500/10"
+                    : "text-slate-300 hover:text-amber-300 hover:bg-amber-500/10"
                 }`}
               >
                 {link.name}
                 {link.badge && (
-                  <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-400 to-pink-500 text-slate-950 rounded-full">
+                  <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 rounded-full">
                     {link.badge}
                   </span>
                 )}
@@ -113,10 +113,12 @@ export const Navbar = () => {
             {user ? (
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-slate-900 border border-slate-700 hover:border-pink-500/40 transition-colors"
+                className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-colors cursor-pointer"
               >
-                <span className="text-xs font-medium text-slate-200">{user.name.split(" ")[0]}</span>
-                <img src={user.avatar} alt={user.name} className="w-7 h-7 rounded-full object-cover border border-pink-500/40" />
+                <span className="text-xs font-medium text-amber-200">{user.name.split(" ")[0]}</span>
+                <div className="w-7 h-7 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-[10px] uppercase">
+                  {user.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                </div>
               </button>
             ) : (
               <Button variant="outline" size="sm" onClick={() => openAuthModal("login")}>

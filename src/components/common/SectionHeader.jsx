@@ -12,7 +12,7 @@ export const SectionHeader = ({
     <div className={`mb-12 ${centered ? "text-center" : "text-left"} ${className}`}>
       {badge && (
         <div className="mb-3">
-          <Badge variant="pink">{badge}</Badge>
+          <Badge variant="gold">{badge}</Badge>
         </div>
       )}
       <h2 className="text-3xl md:text-5xl font-bold font-serif-heading text-slate-100 tracking-tight mb-4">
