@@ -7,13 +7,13 @@ export const SALON_INFO = {
   email: "contact@sugarsalon.in",
   address: "Shop No C-28, Zenith CHS LTD, Marol Maroshi Rd, near T2 International Airport, Bhavani Nagar, Marol, Andheri East, Mumbai, Maharashtra 400059",
   shortLocation: "Marol, Andheri East, Mumbai (Near T2 Airport)",
-  googleMapsUrl: "https://maps.app.goo.gl/mRfq4U3SeNTz8zmv8",
+  googleMapsUrl: "https://www.google.com/maps/place/Jawed+Habib+Hair+Studio+is+Sugar+Salon/@19.1185153,72.8804929,723m/data=!3m1!1e3!4m8!3m7!1s0x3be7c81748c38841:0x5d6bcd1d4fd43695!8m2!3d19.1185153!4d72.8804929!9m1!1b1!16s%2Fg%2F11j973pvw8?entry=ttu",
   hours: [
     { days: "Monday - Sunday (7 Days)", time: "11:00 AM - 9:00 PM" }
   ],
   socials: {
     instagram: "https://www.instagram.com/sugarsalon.unisex?igsh=MWJzcmllMXlpYjM2dg==",
-    googleMaps: "https://maps.app.goo.gl/mRfq4U3SeNTz8zmv8"
+    googleMaps: "https://www.google.com/maps/place/Jawed+Habib+Hair+Studio+is+Sugar+Salon/@19.1185153,72.8804929,723m/data=!3m1!1e3!4m8!3m7!1s0x3be7c81748c38841:0x5d6bcd1d4fd43695!8m2!3d19.1185153!4d72.8804929!9m1!1b1!16s%2Fg%2F11j973pvw8?entry=ttu"
   }
 };
 
