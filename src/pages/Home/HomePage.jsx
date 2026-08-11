@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, Calendar, ArrowRight, ShieldCheck, Heart, Star, CheckCircle, Award } from "lucide-react";
 import { Button } from "../../components/ui/Button";
@@ -7,11 +7,23 @@ import { ServiceCard } from "../../components/cards/ServiceCard";
 import { OfferCard } from "../../components/cards/OfferCard";
 import { TestimonialCard } from "../../components/cards/TestimonialCard";
 import { MOCK_SERVICES, MOCK_OFFERS, MOCK_FEEDBACK } from "../../data/mockData";
+import { getReviews } from "../../services/appointmentService";
 import { SERVICE_CATEGORIES, SALON_INFO } from "../../constants";
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [reviews, setReviews] = useState(MOCK_FEEDBACK);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const data = await getReviews();
+      if (data && data.length > 0) {
+        setReviews(data.slice(0, 3));
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const filteredServices =
     activeCategory === "all"
@@ -237,7 +249,7 @@ export const HomePage = () => {
           subtitle="Real reviews from verified Sugar Salon guests in Andheri East, Mumbai."
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {MOCK_FEEDBACK.map((fb) => (
+          {reviews.map((fb) => (
             <TestimonialCard key={fb.id} testimonial={fb} />
           ))}
         </div>

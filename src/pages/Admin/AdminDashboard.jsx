@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
@@ -30,12 +30,22 @@ const CATEGORY_PIE = [
 ];
 
 export const AdminDashboard = () => {
-  const [appointments, setAppointments] = useState(getAppointments());
-  const [services, setServices] = useState(getServices());
+  const [appointments, setAppointments] = useState([]);
+  const [services, setServices] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const handleStatusChange = (id, newStatus) => {
-    const updated = updateAppointmentStatus(id, newStatus);
+  useEffect(() => {
+    const fetchData = async () => {
+      const apts = await getAppointments();
+      const srvs = await getServices();
+      setAppointments(apts);
+      setServices(srvs);
+    };
+    fetchData();
+  }, []);
+
+  const handleStatusChange = async (id, newStatus) => {
+    const updated = await updateAppointmentStatus(id, newStatus);
     setAppointments(updated);
   };
 

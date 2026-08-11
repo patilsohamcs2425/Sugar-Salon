@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SectionHeader } from "../../components/common/SectionHeader";
 import { TestimonialCard } from "../../components/cards/TestimonialCard";
 import { FeedbackForm } from "../../components/forms/FeedbackForm";
@@ -6,11 +6,23 @@ import { getReviews } from "../../services/appointmentService";
 import { Star } from "lucide-react";
 
 export const FeedbackPage = () => {
-  const [reviews, setReviews] = useState(getReviews());
+  const [reviews, setReviews] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("all");
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const data = await getReviews();
+      setReviews(data);
+    };
+    fetchReviews();
+  }, []);
+
   const handleReviewAdded = (newReview) => {
-    setReviews([newReview, ...reviews]);
+    if (newReview && newReview.author) {
+      setReviews((prev) => [newReview, ...prev.filter((r) => r && typeof r === "object" && r.author)]);
+    } else {
+      getReviews().then((data) => setReviews(data));
+    }
   };
 
   const filteredReviews =

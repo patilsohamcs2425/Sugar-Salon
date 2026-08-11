@@ -10,16 +10,15 @@ export const FeedbackForm = ({ onReviewAdded }) => {
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!author || !comment) return;
 
-    const newReview = addReview({
+    const newReview = await addReview({
       author,
       rating,
       service,
       comment,
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
       role: "Verified Guest"
     });
 

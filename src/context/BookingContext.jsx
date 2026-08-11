@@ -41,7 +41,7 @@ export const BookingProvider = ({ children }) => {
     }
   };
 
-  const confirmBooking = () => {
+  const confirmBooking = async () => {
     if (!selectedService || !selectedDate || !selectedTimeSlot || !clientDetails.name) {
       return null;
     }
@@ -63,7 +63,7 @@ export const BookingProvider = ({ children }) => {
       notes: clientDetails.notes
     };
 
-    const created = createAppointment(bookingPayload);
+    const created = await createAppointment(bookingPayload);
     setLastConfirmedBooking(created);
     setBookingStep(5); // Confirmation screen
     return created;

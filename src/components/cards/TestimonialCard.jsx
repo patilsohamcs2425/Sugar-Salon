@@ -2,14 +2,20 @@ import React from "react";
 import { Quote, CheckCircle } from "lucide-react";
 import { RatingStars } from "../ui/RatingStars";
 
-export const TestimonialCard = ({ testimonial }) => {
+export const TestimonialCard = ({ testimonial = {} }) => {
+  const authorName = testimonial.author || "Verified Guest";
+  const commentText = testimonial.comment || "Wonderful experience at Sugar Salon!";
+  const serviceText = testimonial.service || "Organic Sugar Waxing & Care";
+  const ratingValue = testimonial.rating || 5;
+  const dateText = testimonial.date || "Recently";
+
   return (
     <div className="glass-card rounded-3xl p-6 md:p-8 flex flex-col justify-between relative group">
       <Quote size={40} className="absolute top-6 right-6 text-pink-500/10 group-hover:text-pink-500/20 transition-colors" />
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <RatingStars rating={testimonial.rating} showValue={false} />
+          <RatingStars rating={ratingValue} showValue={false} />
           {testimonial.isGoogleReview && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-900 border border-slate-700 text-amber-300">
               <svg className="w-3 h-3 fill-current text-blue-400" viewBox="0 0 24 24">
@@ -20,26 +26,24 @@ export const TestimonialCard = ({ testimonial }) => {
           )}
         </div>
         <p className="text-slate-300 text-sm leading-relaxed italic mb-6">
-          "{testimonial.comment}"
+          "{commentText}"
         </p>
       </div>
 
       <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img
-            src={testimonial.avatar}
-            alt={testimonial.author}
-            className="w-10 h-10 rounded-full object-cover border border-pink-500/30"
-          />
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-600/20 text-pink-300 border border-pink-500/30 flex items-center justify-center font-bold text-xs uppercase tracking-wider shrink-0">
+            {authorName.split(" ").map((n) => n[0]).join("").slice(0, 2) || "VG"}
+          </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h4 className="text-sm font-bold text-slate-100">{testimonial.author}</h4>
+              <h4 className="text-sm font-bold text-slate-100">{authorName}</h4>
               <CheckCircle size={14} className="text-pink-400" title="Verified Customer" />
             </div>
-            <span className="text-xs text-slate-400">{testimonial.service}</span>
+            <span className="text-xs text-slate-400">{serviceText}</span>
           </div>
         </div>
-        <span className="text-[11px] text-slate-500">{testimonial.date}</span>
+        <span className="text-[11px] text-slate-500">{dateText}</span>
       </div>
     </div>
   );

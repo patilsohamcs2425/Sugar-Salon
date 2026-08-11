@@ -1,4 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { auth, googleProvider, isFirebaseConfigured } from "../firebase/config";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut as firebaseSignOut,
+  onAuthStateChanged
+} from "firebase/auth";
 import {
   generateMockJWT,
   verifyAndDecodeJWT,
@@ -13,28 +21,51 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState("login"); // 'login' or 'register'
+  const [authModalTab, setAuthModalTab] = useState("login");
   const [pendingCallback, setPendingCallback] = useState(null);
 
-  // Initialize Auth state from stored JWT
+  // Synchronize authentication state (Firebase Auth listener or Local Storage JWT)
   useEffect(() => {
-    const storedToken = getJWTToken();
-    if (storedToken) {
-      const decodedPayload = verifyAndDecodeJWT(storedToken);
-      if (decodedPayload) {
-        setToken(storedToken);
-        setUser({
-          id: decodedPayload.sub,
-          name: decodedPayload.name,
-          email: decodedPayload.email,
-          role: decodedPayload.role,
-          tier: decodedPayload.tier,
-          avatar: decodedPayload.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-        });
-      } else {
-        removeJWTToken();
+    if (isFirebaseConfigured && auth) {
+      const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+        if (fbUser) {
+          const idToken = await fbUser.getIdToken();
+          setToken(idToken);
+          setUser({
+            id: fbUser.uid,
+            name: fbUser.displayName || fbUser.email.split("@")[0],
+            email: fbUser.email,
+            role: fbUser.email?.includes("admin") ? "admin" : "client",
+            tier: fbUser.email?.includes("admin") ? "Administrator" : "Sugar VIP Member"
+          });
+        } else {
+          setUser(null);
+          setToken(null);
+        }
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } else {
+      // Local storage fallback
+      const storedToken = getJWTToken();
+      if (storedToken) {
+        const decodedPayload = verifyAndDecodeJWT(storedToken);
+        if (decodedPayload) {
+          setToken(storedToken);
+          setUser({
+            id: decodedPayload.sub,
+            name: decodedPayload.name,
+            email: decodedPayload.email,
+            role: decodedPayload.role,
+            tier: decodedPayload.tier
+          });
+        } else {
+          removeJWTToken();
+        }
       }
+      setLoading(false);
     }
   }, []);
 
@@ -65,29 +96,67 @@ export const AuthProvider = ({ children }) => {
     setPendingCallback(null);
   };
 
-  const loginWithEmail = (email, password) => {
-    const clientUser = {
-      id: `usr-${Date.now()}`,
-      name: email.split("@")[0].replace(".", " "),
-      email,
-      role: "client",
-      tier: "Sugar VIP Guest",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-    };
-    setAuthSession(clientUser);
+  const loginWithEmail = async (email, password) => {
+    if (isFirebaseConfigured && auth) {
+      try {
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        toast.success(`Signed in successfully!`);
+        closeAuthModal();
+        return res.user;
+      } catch (err) {
+        toast.error(`Authentication error: ${err.message}`);
+        throw err;
+      }
+    } else {
+      const clientUser = {
+        id: `usr-${Date.now()}`,
+        name: email.split("@")[0].replace(".", " "),
+        email,
+        role: email.includes("admin") ? "admin" : "client",
+        tier: "Sugar VIP Guest"
+      };
+      setAuthSession(clientUser);
+    }
   };
 
-  const registerCustomer = (name, email, phone, password) => {
-    const newUser = {
-      id: `usr-${Date.now()}`,
-      name,
-      email,
-      phone,
-      role: "client",
-      tier: "Sugar VIP Member",
-      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80"
-    };
-    setAuthSession(newUser);
+  const registerCustomer = async (name, email, phone, password) => {
+    if (isFirebaseConfigured && auth) {
+      try {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        toast.success("Account created successfully!");
+        closeAuthModal();
+        return res.user;
+      } catch (err) {
+        toast.error(`Registration error: ${err.message}`);
+        throw err;
+      }
+    } else {
+      const newUser = {
+        id: `usr-${Date.now()}`,
+        name,
+        email,
+        phone,
+        role: "client",
+        tier: "Sugar VIP Member"
+      };
+      setAuthSession(newUser);
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    if (isFirebaseConfigured && auth && googleProvider) {
+      try {
+        const res = await signInWithPopup(auth, googleProvider);
+        toast.success(`Signed in with Google as ${res.user.displayName}!`);
+        closeAuthModal();
+        return res.user;
+      } catch (err) {
+        toast.error(`Google Sign-In failed: ${err.message}`);
+        throw err;
+      }
+    } else {
+      loginAsClient("Google User", "google.user@example.com");
+    }
   };
 
   const loginAsClient = (name = "Ananya Mehta", email = "ananya@example.com") => {
@@ -96,8 +165,7 @@ export const AuthProvider = ({ children }) => {
       name,
       email,
       role: "client",
-      tier: "Sugar VIP Luxe",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+      tier: "Sugar VIP Luxe"
     };
     setAuthSession(clientUser);
   };
@@ -108,13 +176,15 @@ export const AuthProvider = ({ children }) => {
       name: "Sugar Admin Manager",
       email: "admin@sugarsalon.in",
       role: "admin",
-      tier: "Administrator",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+      tier: "Administrator"
     };
     setAuthSession(adminUser);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    if (isFirebaseConfigured && auth) {
+      await firebaseSignOut(auth);
+    }
     setUser(null);
     setToken(null);
     removeJWTToken();
@@ -122,7 +192,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const requireAuth = (callback) => {
-    if (user && token) {
+    if (user) {
       callback();
     } else {
       toast.error("Please sign in to access this feature.");
@@ -137,9 +207,12 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         token,
+        loading,
         isAdmin,
+        isFirebaseConfigured,
         loginWithEmail,
         registerCustomer,
+        loginWithGoogle,
         loginAsClient,
         loginAsAdmin,
         logout,
