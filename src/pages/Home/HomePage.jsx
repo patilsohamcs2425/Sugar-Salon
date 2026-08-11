@@ -19,7 +19,7 @@ export const HomePage = () => {
     const fetchReviews = async () => {
       const data = await getReviews();
       if (data && data.length > 0) {
-        setReviews(data.slice(0, 3));
+        setReviews(data.slice(0, 6));
       }
     };
     fetchReviews();
@@ -248,10 +248,16 @@ export const HomePage = () => {
           title="What Our Guests Say"
           subtitle="Real reviews from verified Sugar Salon guests in Andheri East, Mumbai."
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {reviews.map((fb) => (
             <TestimonialCard key={fb.id} testimonial={fb} />
           ))}
+        </div>
+
+        <div className="text-center">
+          <Button variant="outline" size="md" onClick={() => navigate("/feedback")}>
+            View All Google Maps & Guest Reviews <ArrowRight size={14} className="ml-1.5" />
+          </Button>
         </div>
       </section>
     </div>

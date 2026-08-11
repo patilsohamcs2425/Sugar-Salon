@@ -15,7 +15,8 @@ export const initLocalStorageData = () => {
   if (!localStorage.getItem(SERVICES_STORAGE_KEY)) {
     setStoredItem(SERVICES_STORAGE_KEY, MOCK_SERVICES);
   }
-  if (!localStorage.getItem(REVIEWS_STORAGE_KEY)) {
+  const storedReviews = getStoredItem(REVIEWS_STORAGE_KEY, []);
+  if (!localStorage.getItem(REVIEWS_STORAGE_KEY) || (Array.isArray(storedReviews) && storedReviews.length < MOCK_FEEDBACK.length)) {
     setStoredItem(REVIEWS_STORAGE_KEY, MOCK_FEEDBACK);
   }
 };

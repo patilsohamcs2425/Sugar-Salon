@@ -232,20 +232,40 @@ export const MOCK_FEEDBACK = [
     service: "Hair Styling & Organic Sugar Waxing",
     date: "2 weeks ago",
     isGoogleReview: true,
-    comment: "Got my hair styling and organic sugar waxing done here at Sugar Salon Zenith CHS. Amazing service and very soft-spoken staff. Sugar waxing is so much gentler and better than normal resin wax! Will definitely visit again."
+    comment: "Got my hair styling and organic sugar waxing done here at Sugar Salon Zenith CHS. Amazing service and very soft-spoken staff. Sugar waxing is so much gentler than normal resin wax! Will definitely visit again."
   },
   {
     id: "fb-3",
+    author: "Priyanka Deshmukh",
+    role: "Google Maps Reviewer",
+    rating: 4,
+    service: "Full Arms & Legs Sugar Waxing",
+    date: "2 weeks ago",
+    isGoogleReview: true,
+    comment: "Very gentle sugar waxing treatment. Skin felt super smooth afterwards without any redness. The salon is clean and aesthetic. Had to wait 10 mins past my appointment time during weekend rush, but service quality made up for it!"
+  },
+  {
+    id: "fb-4",
     author: "Deepika Nair",
     role: "Google Maps Reviewer",
     rating: 5,
     service: "Diamond Radiance HydraFacial",
     date: "3 weeks ago",
     isGoogleReview: true,
-    comment: "Superb service by the Sugar Salon team. Very neat and clean place in Marol Maroshi Road. The organic treatment left my skin feeling super smooth without any redness. Worth every rupee!"
+    comment: "Superb service by the Sugar Salon team. Very neat and clean place on Marol Maroshi Road. The organic treatment left my skin feeling super smooth without any irritation. Worth every rupee!"
   },
   {
-    id: "fb-4",
+    id: "fb-5",
+    author: "Aarti Sharma",
+    role: "Google Maps Reviewer",
+    rating: 3,
+    service: "Brazilian Sugar Wax Combo",
+    date: "3 weeks ago",
+    isGoogleReview: true,
+    comment: "The sugar waxing result was good and painless, but weekend parking near Marol Maroshi road was slightly tricky. Overall good hygienic salon, but recommended to book your slot in advance!"
+  },
+  {
+    id: "fb-6",
     author: "Rashmi Kadam",
     role: "Google Maps Reviewer",
     rating: 5,
@@ -253,6 +273,36 @@ export const MOCK_FEEDBACK = [
     date: "1 month ago",
     isGoogleReview: true,
     comment: "Loved the facial and nail service here! The ambiance is so calming and the timings (11 AM to 9 PM) are super convenient for working professionals after office hours."
+  },
+  {
+    id: "fb-7",
+    author: "Pooja Malhotra",
+    role: "Verified Guest",
+    rating: 4,
+    service: "Diamond Radiance HydraFacial",
+    date: "1 month ago",
+    isGoogleReview: false,
+    comment: "HydraFacial gave an instant glass skin glow before my cousin's wedding. Specialist Elena explained each step nicely. A bit busy on Sundays, so definitely schedule ahead!"
+  },
+  {
+    id: "fb-8",
+    author: "Ananya Mehta",
+    role: "Sugar VIP Member",
+    rating: 5,
+    service: "Signature Organic Sugar Waxing",
+    date: "1 month ago",
+    isGoogleReview: false,
+    comment: "I've been a regular member for 6 months now. The organic sugar paste is hypoallergenic and so much better than traditional wax. The staff is consistently polite and welcoming."
+  },
+  {
+    id: "fb-9",
+    author: "Meera Joshi",
+    role: "Google Maps Reviewer",
+    rating: 4,
+    service: "Luxe Russian Gel Manicure",
+    date: "2 months ago",
+    isGoogleReview: true,
+    comment: "Clean, cozy salon right near T2 airport. Russian gel nail art lasted 4 full weeks without chipping. Great attention to detail."
   }
 ];
 
