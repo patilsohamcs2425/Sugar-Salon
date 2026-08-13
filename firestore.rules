@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Reviews Collection Rules
+    match /reviews/{reviewId} {
+      // Anyone can read reviews to display them on the website
+      allow read: if true;
+      
+      // Anyone can submit a new review, provided it contains required fields & valid rating
+      allow create: if request.resource.data.keys().hasAll(['author', 'rating', 'comment'])
+                    && request.resource.data.rating >= 1
+                    && request.resource.data.rating <= 5;
+                    
+      // Prevent public users from updating or deleting existing customer reviews
+      allow update, delete: if false;
+    }
+    
+    // Appointments Collection Rules
+    match /appointments/{appointmentId} {
+      allow read, create: if true;
+      allow update, delete: if false;
+    }
+
+    // Services Collection Rules
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

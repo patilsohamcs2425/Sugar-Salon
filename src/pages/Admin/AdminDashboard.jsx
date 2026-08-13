@@ -23,10 +23,10 @@ const REVENUE_DATA = [
 ];
 
 const CATEGORY_PIE = [
-  { name: "Sugar Waxing", value: 45, color: "#e83870" },
-  { name: "HydraFacials", value: 25, color: "#d4af37" },
-  { name: "Hair Styling", value: 20, color: "#a855f7" },
-  { name: "Gel Nails", value: 10, color: "#10b981" }
+  { name: "Facials & Skin", value: 35, color: "#e83870" },
+  { name: "Waxing & Threading", value: 30, color: "#d4af37" },
+  { name: "Manicure & Pedicure", value: 20, color: "#10b981" },
+  { name: "Hair Care & Styling", value: 15, color: "#a855f7" }
 ];
 
 export const AdminDashboard = () => {

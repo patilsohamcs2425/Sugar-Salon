@@ -23,7 +23,7 @@ export const AboutPage = () => {
             We pioneered an organic 100% natural sugar paste formulated solely from pure sugar, purified water, and organic lemon juice. Kept at lukewarm body temperature, our sugar formula gently seeps into hair follicles to lift hair from the root in its natural direction of growth.
           </p>
           <p>
-            Combined with our bespoke HydraFacials, custom balayage coloring, and Japanese BIAB gel manicures, Sugar Salon is Beverly Hills' sanctuary for effortless everyday luxury.
+            Combined with our clinical O3+ Whitening Facials, Rica Italian waxing, pre-bridal packages, and luxury gel manicures, Sugar Salon is your premier sanctuary for everyday luxury.
           </p>
 
           <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-center">

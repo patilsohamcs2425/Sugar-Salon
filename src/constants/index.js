@@ -31,12 +31,14 @@ export const NAV_LINKS = [
 
 export const SERVICE_CATEGORIES = [
   { id: "all", name: "All Experiences" },
-  { id: "sugar-waxing", name: "Organic Sugar Waxing" },
-  { id: "hair-styling", name: "Hair Styling & Coloring" },
-  { id: "facials-skin", name: "Facials & Skin Glow" },
-  { id: "nail-art", name: "Gel Nails & Manicure" },
-  { id: "lash-brows", name: "Lash & Brow Care" },
-  { id: "bridal-spa", name: "Bridal & Party Pampering" }
+  { id: "facials", name: "Facials" },
+  { id: "clean-up", name: "Clean Up" },
+  { id: "dtan-bleach", name: "D-Tan & Bleach" },
+  { id: "hands-legs", name: "Hands & Legs (Mani-Pedi)" },
+  { id: "nail-care", name: "Nail Filling & Paint" },
+  { id: "threading-essentials", name: "Body Essentials & Threading" },
+  { id: "waxing", name: "Waxing Care" },
+  { id: "bridal", name: "Bridal & Make Up" }
 ];
 
 export const STYLISTS = [
@@ -49,7 +51,7 @@ export const STYLISTS = [
     reviewsCount: 210,
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
     bio: "Specializing in gentle sugar waxing, deep pore skin extractions, and glass-skin radiance treatments.",
-    specialties: ["Organic Sugar Waxing", "HydraFacials", "Dermaplaning"]
+    specialties: ["O3+ Clinical Facials", "Rica Waxing", "Pre-Bridal Glam"]
   },
   {
     id: "st-2",
@@ -118,8 +120,8 @@ export const MEMBERSHIP_TIERS = [
     name: "Sugar Royal Platinum",
     price: "₹5,999/mo",
     features: [
-      "Unlimited Organic Body Sugar Waxing",
-      "1 Monthly Deluxe Diamond HydraFacial",
+      "Unlimited Full Body Waxing (Rica)",
+      "1 Monthly Deluxe O3+ Whitening Facial",
       "20% off all hair coloring & bridal packages",
       "Free Birthday Beauty Glam Voucher",
       "VIP private salon suite access"

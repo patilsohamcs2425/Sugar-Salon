@@ -1,23 +1,20 @@
 import { db, isFirebaseConfigured } from "../firebase/config";
-import { collection, getDocs, doc, updateDoc, setDoc, query, orderBy } from "firebase/firestore";
-import { MOCK_SERVICES, MOCK_FEEDBACK, INITIAL_APPOINTMENTS } from "../data/mockData";
+import { collection, getDocs, doc, setDoc, query, orderBy, onSnapshot } from "firebase/firestore";
+import { MOCK_SERVICES, INITIAL_APPOINTMENTS } from "../data/mockData";
 import { getStoredItem, setStoredItem, generateAppointmentId } from "../utils/formatters";
 
 const APPOINTMENTS_STORAGE_KEY = "sugar_salon_appointments";
 const SERVICES_STORAGE_KEY = "sugar_salon_services";
-const REVIEWS_STORAGE_KEY = "sugar_salon_reviews";
+const USER_REVIEWS_STORAGE_KEY = "sugar_salon_user_reviews";
 
 // Initialize Local Storage Fallback
 export const initLocalStorageData = () => {
   if (!localStorage.getItem(APPOINTMENTS_STORAGE_KEY)) {
     setStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
   }
-  if (!localStorage.getItem(SERVICES_STORAGE_KEY)) {
+  const currentStoredServices = getStoredItem(SERVICES_STORAGE_KEY, []);
+  if (!localStorage.getItem(SERVICES_STORAGE_KEY) || (Array.isArray(currentStoredServices) && currentStoredServices.length !== MOCK_SERVICES.length)) {
     setStoredItem(SERVICES_STORAGE_KEY, MOCK_SERVICES);
-  }
-  const storedReviews = getStoredItem(REVIEWS_STORAGE_KEY, []);
-  if (!localStorage.getItem(REVIEWS_STORAGE_KEY) || (Array.isArray(storedReviews) && storedReviews.length < MOCK_FEEDBACK.length)) {
-    setStoredItem(REVIEWS_STORAGE_KEY, MOCK_FEEDBACK);
   }
 };
 
@@ -105,26 +102,67 @@ export const getReviews = async () => {
       const reviewsCol = collection(db, "reviews");
       const snapshot = await getDocs(reviewsCol);
       if (!snapshot.empty) {
-        const rawList = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-        const cleanList = rawList.flat().filter((item) => item && typeof item === "object" && item.author);
-        if (cleanList.length > 0) return cleanList;
+        return snapshot.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .filter((item) => item && typeof item === "object" && item.author);
       }
     } catch (err) {
-      console.warn("Firestore getReviews fallback to local:", err.message);
+      console.warn("Firestore getReviews error:", err.message);
     }
   }
-  initLocalStorageData();
-  const stored = getStoredItem(REVIEWS_STORAGE_KEY, MOCK_FEEDBACK);
-  const cleanList = (Array.isArray(stored) ? stored : MOCK_FEEDBACK)
-    .flat()
-    .filter((item) => item && typeof item === "object" && item.author);
-  return cleanList.length > 0 ? cleanList : MOCK_FEEDBACK;
+  const userSubmitted = getStoredItem(USER_REVIEWS_STORAGE_KEY, []);
+  return Array.isArray(userSubmitted) ? userSubmitted.filter((r) => r && r.author) : [];
+};
+
+/**
+ * Real-time listener for Firebase/Firestore website reviews.
+ */
+export const subscribeToFirebaseReviews = (onUpdate, onError) => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const reviewsCol = collection(db, "reviews");
+      const unsubscribe = onSnapshot(
+        reviewsCol,
+        (snapshot) => {
+          const list = snapshot.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .filter((item) => item && typeof item === "object" && item.author);
+          
+          // Sort newest first
+          list.sort((a, b) => {
+            const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return timeB - timeA;
+          });
+
+          onUpdate(list);
+        },
+        (err) => {
+          console.warn("Firestore onSnapshot error for reviews:", err.message);
+          if (onError) onError(err);
+          // Fallback to one-time local/firestore fetch
+          getReviews().then(onUpdate);
+        }
+      );
+      return unsubscribe;
+    } catch (err) {
+      console.warn("Error setting up Firestore listener:", err.message);
+      if (onError) onError(err);
+    }
+  }
+
+  // If Firebase is not configured, fall back to local storage user reviews
+  getReviews().then(onUpdate);
+  return () => {};
 };
 
 export const addReview = async (reviewData) => {
+  const now = new Date().toISOString();
   const newReview = {
     id: `fb-${Date.now()}`,
+    createdAt: now,
     date: "Just now",
+    isWebsiteReview: true,
     ...reviewData
   };
 
@@ -137,13 +175,10 @@ export const addReview = async (reviewData) => {
     }
   }
 
-  initLocalStorageData();
-  const currentReviews = getStoredItem(REVIEWS_STORAGE_KEY, MOCK_FEEDBACK);
-  const validCurrent = (Array.isArray(currentReviews) ? currentReviews : MOCK_FEEDBACK)
-    .flat()
-    .filter((item) => item && typeof item === "object" && item.author);
-
+  const currentLocal = getStoredItem(USER_REVIEWS_STORAGE_KEY, []);
+  const validCurrent = Array.isArray(currentLocal) ? currentLocal : [];
   const updated = [newReview, ...validCurrent];
-  setStoredItem(REVIEWS_STORAGE_KEY, updated);
+  setStoredItem(USER_REVIEWS_STORAGE_KEY, updated);
   return newReview;
 };
+

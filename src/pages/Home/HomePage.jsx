@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, Calendar, ArrowRight, ShieldCheck, Heart, Star, CheckCircle, Award } from "lucide-react";
 import { Button } from "../../components/ui/Button";
@@ -6,29 +6,21 @@ import { SectionHeader } from "../../components/common/SectionHeader";
 import { ServiceCard } from "../../components/cards/ServiceCard";
 import { OfferCard } from "../../components/cards/OfferCard";
 import { TestimonialCard } from "../../components/cards/TestimonialCard";
-import { MOCK_SERVICES, MOCK_OFFERS, MOCK_FEEDBACK } from "../../data/mockData";
-import { getReviews } from "../../services/appointmentService";
+import { MOCK_SERVICES, MOCK_OFFERS } from "../../data/mockData";
+import { useUnifiedReviews } from "../../hooks/useUnifiedReviews";
 import { SERVICE_CATEGORIES, SALON_INFO } from "../../constants";
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
-  const [reviews, setReviews] = useState(MOCK_FEEDBACK);
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      const data = await getReviews();
-      if (data && data.length > 0) {
-        setReviews(data.slice(0, 6));
-      }
-    };
-    fetchReviews();
-  }, []);
+  const { combinedReviews, googleData, isLoading } = useUnifiedReviews();
 
   const filteredServices =
     activeCategory === "all"
       ? MOCK_SERVICES.slice(0, 6)
       : MOCK_SERVICES.filter((s) => s.category === activeCategory);
+
+  const displayReviews = combinedReviews.slice(0, 6);
 
   return (
     <div className="space-y-24">
@@ -53,7 +45,7 @@ export const HomePage = () => {
               </h1>
 
               <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
-                Experience zero-pain 100% natural organic body sugar hair removal, bespoke HydraFacials, and luxury salon styling at Marol Maroshi Road near T2 International Airport, Mumbai. Open daily 11 AM – 9 PM!
+                Experience premium O3+ Whitening Facials, Rica Waxing, Pre-Bridal packages, and luxury salon styling at Marol Maroshi Road near T2 International Airport, Mumbai. Open daily 11 AM – 9 PM!
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
@@ -73,7 +65,11 @@ export const HomePage = () => {
                 </div>
                 <a href={SALON_INFO.socials.googleMaps} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs text-amber-300 hover:underline">
                   <Star className="text-amber-400 fill-amber-400" size={18} />
-                  <span>4.9/5 Star Google Reviews</span>
+                  <span>
+                    {googleData.success
+                      ? `${googleData.rating} / 5.0 Google Reviews`
+                      : "Verified Guest Reviews"}
+                  </span>
                 </a>
                 <div className="flex items-center gap-2 text-xs text-slate-300">
                   <Heart className="text-rose-400" size={18} />
@@ -99,18 +95,11 @@ export const HomePage = () => {
                       <Award size={20} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-100">Sugar Salon Marol</h4>
-                      <p className="text-[11px] text-slate-400">Zenith CHS, Marol Maroshi Rd, Andheri East</p>
+                      <h4 className="text-sm font-bold text-slate-100">Sugar Care Specialists</h4>
+                      <p className="text-xs text-slate-400">Certified Skin & Beauty Professionals</p>
                     </div>
                   </div>
-                  <a
-                    href={`https://wa.me/${SALON_INFO.whatsapp}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-bold text-amber-300 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/30 hover:bg-amber-500/20 transition-colors"
-                  >
-                    Call: {SALON_INFO.phone}
-                  </a>
+                  <CheckCircle className="text-emerald-400" size={20} />
                 </div>
               </div>
             </div>
@@ -244,15 +233,30 @@ export const HomePage = () => {
       {/* Testimonials */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="Google Maps Verified Reviews"
+          badge="Verified Client Feedback"
           title="What Our Guests Say"
-          subtitle="Real reviews from verified Sugar Salon guests in Andheri East, Mumbai."
+          subtitle="Real reviews from verified Sugar Salon guests and Google Maps in Andheri East, Mumbai."
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {reviews.map((fb) => (
-            <TestimonialCard key={fb.id} testimonial={fb} />
-          ))}
-        </div>
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="glass-card rounded-3xl p-6 h-40 animate-pulse bg-slate-900/50" />
+            ))}
+          </div>
+        ) : displayReviews.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {displayReviews.map((fb) => (
+              <TestimonialCard key={fb.id} testimonial={fb} />
+            ))}
+          </div>
+        ) : (
+          <div className="glass-panel rounded-3xl p-8 text-center border border-slate-800 mb-8">
+            <p className="text-sm text-slate-400">
+              No reviews available yet. Be the first to share your experience!
+            </p>
+          </div>
+        )}
 
         <div className="text-center">
           <Button variant="outline" size="md" onClick={() => navigate("/feedback")}>

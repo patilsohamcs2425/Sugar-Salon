@@ -1,29 +1,40 @@
 import React, { useState } from "react";
-import { Star, CheckCircle } from "lucide-react";
+import { Star, CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { addReview } from "../../services/appointmentService";
 
 export const FeedbackForm = ({ onReviewAdded }) => {
   const [author, setAuthor] = useState("");
   const [rating, setRating] = useState(5);
-  const [service, setService] = useState("Signature Full Body Organic Sugar Waxing");
+  const [service, setService] = useState("Organic Sugar Waxing & Care");
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!author || !comment) return;
+    if (!author.trim() || !comment.trim()) return;
 
-    const newReview = await addReview({
-      author,
-      rating,
-      service,
-      comment,
-      role: "Verified Guest"
-    });
+    setLoading(true);
+    try {
+      const newReview = await addReview({
+        author: author.trim(),
+        rating,
+        service: service.trim() || "Salon Treatment",
+        comment: comment.trim(),
+        role: "Verified Guest",
+        isWebsiteReview: true
+      });
 
-    setSubmitted(true);
-    if (onReviewAdded) onReviewAdded(newReview);
+      setSubmitted(true);
+      setAuthor("");
+      setComment("");
+      if (onReviewAdded) onReviewAdded(newReview);
+    } catch (err) {
+      console.error("Failed to submit review:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -31,10 +42,10 @@ export const FeedbackForm = ({ onReviewAdded }) => {
       <div className="glass-panel rounded-3xl p-8 text-center border border-pink-500/30">
         <CheckCircle size={40} className="text-emerald-400 mx-auto mb-3" />
         <h4 className="text-xl font-bold font-serif-heading text-slate-100 mb-2">
-          Thank You for Your Feedback!
+          Thank You for Your Review!
         </h4>
         <p className="text-xs text-slate-400 mb-4">
-          Your review helps us maintain the highest standards of luxury sugar care.
+          Your feedback has been saved to Firebase and will be visible live on our website!
         </p>
         <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
           Submit Another Review
@@ -48,7 +59,7 @@ export const FeedbackForm = ({ onReviewAdded }) => {
       <h3 className="text-xl font-bold font-serif-heading text-slate-100 mb-1">
         Share Your Experience
       </h3>
-      <p className="text-xs text-slate-400 mb-4">Loved your treatment? Leave a rating & review!</p>
+      <p className="text-xs text-slate-400 mb-4">Loved your treatment? Leave a rating & review stored on our website!</p>
 
       <div>
         <label className="block text-xs font-semibold text-slate-300 mb-1">Your Name *</label>
@@ -101,15 +112,21 @@ export const FeedbackForm = ({ onReviewAdded }) => {
         <textarea
           required
           rows={3}
-          placeholder="How did your skin feel? What did you love about your specialist?..."
+          placeholder="How did your skin feel? What did you love about your treatment?..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
         />
       </div>
 
-      <Button type="submit" variant="primary" size="md" className="w-full">
-        Submit Review
+      <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <Loader2 size={16} className="animate-spin" /> Submitting...
+          </span>
+        ) : (
+          "Submit Website Review"
+        )}
       </Button>
     </form>
   );

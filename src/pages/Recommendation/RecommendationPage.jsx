@@ -13,10 +13,10 @@ const QUIZ_QUESTIONS = [
     id: 1,
     title: "What is your main beauty focus today?",
     options: [
-      { label: "Zero-pain smooth hair removal", value: "sugar-waxing" },
-      { label: "Deep skin glow & glass hydration", value: "facials-skin" },
-      { label: "Hair color, balayage & silk styling", value: "hair-styling" },
-      { label: "Lashes, brows & nail art makeover", value: "nail-art" }
+      { label: "Smooth hair removal & body waxing", value: "waxing" },
+      { label: "Deep skin glow & O3+ clinical facials", value: "facials" },
+      { label: "Hair cut, coloring & treatment spa", value: "hair-care" },
+      { label: "Gel nails & luxury nail art makeover", value: "nail-art" }
     ]
   },
   {
@@ -25,7 +25,7 @@ const QUIZ_QUESTIONS = [
     options: [
       { label: "Ultra sensitive, prone to redness", value: "sensitive" },
       { label: "Normal / combination", value: "normal" },
-      { label: "Dry or dehydrated needing deep serum", value: "dry" }
+      { label: "Dry or dehydrated needing deep moisture", value: "dry" }
     ]
   },
   {
@@ -34,7 +34,7 @@ const QUIZ_QUESTIONS = [
     options: [
       { label: "Everyday confidence & routine glow", value: "routine" },
       { label: "Upcoming Beach Vacation / Pool Party", value: "vacation" },
-      { label: "Wedding, Gala, or Special Party Night", value: "gala" }
+      { label: "Wedding, Bridal, or Special Gala Night", value: "gala" }
     ]
   }
 ];
@@ -54,7 +54,7 @@ export const RecommendationPage = () => {
       setCurrentStep(currentStep + 1);
     } else {
       // Calculate Recommendation
-      const targetCategory = updated[1] || "sugar-waxing";
+      const targetCategory = updated[1] || "facials";
       const matched = MOCK_SERVICES.find((s) => s.category === targetCategory) || MOCK_SERVICES[0];
       setRecommendedService(matched);
       setCurrentStep(QUIZ_QUESTIONS.length); // Results step
