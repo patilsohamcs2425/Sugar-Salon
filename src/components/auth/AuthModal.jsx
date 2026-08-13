@@ -13,6 +13,7 @@ export const AuthModal = () => {
     loginWithEmail,
     registerCustomer,
     loginWithGoogle,
+    loginAsAdmin,
     isFirebaseConfigured
   } = useAuth();
 
@@ -235,6 +236,18 @@ export const AuthModal = () => {
               />
             </svg>
             Continue with Google
+          </button>
+
+          {/* Quick Admin Access */}
+          <button
+            type="button"
+            onClick={() => {
+              loginAsAdmin();
+              closeAuthModal();
+            }}
+            className="w-full flex items-center justify-center gap-2 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/40 rounded-xl py-2 text-xs font-bold text-purple-300 transition-colors cursor-pointer"
+          >
+            <Lock size={14} className="text-purple-400" /> Sign In as Admin Manager
           </button>
         </div>
       </div>
