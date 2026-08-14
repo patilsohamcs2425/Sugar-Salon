@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "../components/common/Navbar";
 import { Footer } from "../components/common/Footer";
+import { FloatingWhatsApp } from "../components/common/FloatingWhatsApp";
 
 export const MainLayout = ({ children }) => {
   return (
@@ -8,6 +9,7 @@ export const MainLayout = ({ children }) => {
       <Navbar />
       <main className="flex-1 pt-24 pb-16">{children}</main>
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 };

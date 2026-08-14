@@ -4,7 +4,7 @@ export const SALON_INFO = {
   phone: "077386 13609",
   phoneFormatted: "+91 77386 13609",
   whatsapp: "917738613609",
-  email: "contact@sugarsalon.in",
+  email: "sugarsalon6@gmail.com",
   address: "Shop No C-28, Zenith CHS LTD, Marol Maroshi Rd, near T2 International Airport, Bhavani Nagar, Marol, Andheri East, Mumbai, Maharashtra 400059",
   shortLocation: "Marol, Andheri East, Mumbai (Near T2 Airport)",
   googleMapsUrl: "https://www.google.com/maps/place/Jawed+Habib+Hair+Studio+is+Sugar+Salon/@19.1185153,72.8804929,723m/data=!3m1!1e3!4m8!3m7!1s0x3be7c81748c38841:0x5d6bcd1d4fd43695!8m2!3d19.1185153!4d72.8804929!9m1!1b1!16s%2Fg%2F11j973pvw8?entry=ttu",

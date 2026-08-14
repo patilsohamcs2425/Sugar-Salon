@@ -174,7 +174,7 @@ export const AuthProvider = ({ children }) => {
     const adminUser = {
       id: "usr-admin-1",
       name: "Sugar Admin Manager",
-      email: "admin@sugarsalon.in",
+      email: "sugarsalon6@gmail.com",
       role: "admin",
       tier: "Administrator"
     };
