@@ -27,18 +27,11 @@ export const ContactForm = () => {
     }
     setIsSubmitting(false);
     setSubmitted(true);
-
-    // Open mailto link automatically to sugarsalon6@gmail.com
-    const mailtoSubject = encodeURIComponent(`[Sugar Salon Inquiry] ${formData.subject} - ${formData.name}`);
-    const mailtoBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'N/A'}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
-    );
-    window.location.href = `mailto:${SALON_INFO.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
   };
 
   const getWhatsAppUrl = () => {
     const waText = encodeURIComponent(
-      `Hello Sugar Salon!\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'N/A'}\nSubject: ${formData.subject}\nMessage: ${formData.message}`
+      `Hello Sugar Salon!\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'N/A'}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
     );
     return `https://wa.me/${SALON_INFO.whatsapp}?text=${waText}`;
   };
@@ -53,31 +46,36 @@ export const ContactForm = () => {
 
   if (submitted) {
     return (
-      <div className="glass-panel rounded-3xl p-8 text-center border border-amber-500/30 shadow-2xl space-y-6">
-        <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto">
+      <div className="glass-panel rounded-3xl p-8 text-center border border-amber-500/30 shadow-2xl space-y-6 animate-fadeIn">
+        <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
           <CheckCircle2 size={36} />
         </div>
 
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-slate-100 mb-2">
-            Inquiry Dispatched & Saved!
+            Inquiry Received Successfully!
           </h3>
           <p className="text-slate-300 text-sm max-w-md mx-auto leading-relaxed">
-            Your inquiry has been saved to the Sugar Salon Admin Portal and formatted for direct delivery to <strong className="text-amber-300">{SALON_INFO.email}</strong>.
+            Thank you for contacting Sugar Salon. Our concierge team has received your message and will respond to you promptly.
           </p>
         </div>
 
-        {/* Quick Send Action Buttons */}
+        {/* Quick Direct Connect Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <a href={getMailtoUrl()} className="w-full sm:w-auto">
-            <Button variant="primary" size="md" className="w-full justify-center">
-              <Mail size={16} className="mr-2" /> Send via Email ({SALON_INFO.email})
-            </Button>
+          <a
+            href={getWhatsAppUrl()}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all cursor-pointer"
+          >
+            <MessageSquare size={18} /> Chat on WhatsApp
           </a>
-          <a href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
-            <Button variant="gold" size="md" className="w-full justify-center">
-              <MessageSquare size={16} className="mr-2" /> Send via WhatsApp (77386 13609)
-            </Button>
+
+          <a
+            href={getMailtoUrl()}
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
+          >
+            <Mail size={18} /> Send via Email App
           </a>
         </div>
 
@@ -96,7 +94,7 @@ export const ContactForm = () => {
         Direct Concierge Inquiry
       </h3>
       <p className="text-xs text-slate-400 mb-4">
-        Inquiries are delivered directly to <strong className="text-amber-300">sugarsalon6@gmail.com</strong> and WhatsApp concierge (<strong className="text-emerald-400">77386 13609</strong>).
+        Send us your questions or custom requests. Our concierge team is at your service 7 days a week.
       </p>
 
       <div>
@@ -107,7 +105,7 @@ export const ContactForm = () => {
           placeholder="e.g. Amanda Vance"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-400 focus:outline-none"
         />
       </div>
 
@@ -120,7 +118,7 @@ export const ContactForm = () => {
             placeholder="amanda@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-400 focus:outline-none"
           />
         </div>
         <div>
@@ -130,7 +128,7 @@ export const ContactForm = () => {
             placeholder="+91 98765 43210"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-400 focus:outline-none"
           />
         </div>
       </div>
@@ -140,7 +138,7 @@ export const ContactForm = () => {
         <select
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-400 focus:outline-none"
         >
           <option value="General Inquiry">General Inquiry</option>
           <option value="Bridal Package Booking">Bridal Package Booking</option>
@@ -157,12 +155,12 @@ export const ContactForm = () => {
           placeholder="How can our aesthetic team help you today?..."
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-400 focus:outline-none"
         />
       </div>
 
       <Button type="submit" variant="primary" size="md" className="w-full justify-center" disabled={isSubmitting}>
-        <Send size={16} className="mr-2" /> {isSubmitting ? "Sending Inquiry..." : "Send Inquiry"}
+        <Send size={16} className="mr-2" /> {isSubmitting ? "Submitting Inquiry..." : "Send Inquiry"}
       </Button>
     </form>
   );
