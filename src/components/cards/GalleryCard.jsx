@@ -16,7 +16,6 @@ export const GalleryCard = ({ item }) => {
         <h4 className="text-lg font-bold font-serif-heading text-slate-100 mb-1">
           {item.title}
         </h4>
-        <p className="text-xs text-slate-400 mb-2">Service by <span className="text-pink-400 font-medium">{item.stylist}</span></p>
         <p className="text-slate-300 text-xs leading-relaxed">{item.description}</p>
       </div>
     </div>

@@ -3,7 +3,6 @@ import QRCode from "react-qr-code";
 import { Sparkles, Calendar, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, Plus } from "lucide-react";
 import { useBooking } from "../../hooks/useBooking";
 import { MOCK_SERVICES } from "../../data/mockData";
-import { STYLISTS } from "../../constants";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { formatCurrency } from "../../utils/formatters";
@@ -49,11 +48,11 @@ export const AppointmentForm = () => {
       setFormError("Please select a service experience to continue.");
       return;
     }
-    if (bookingStep === 3 && (!selectedDate || !selectedTimeSlot)) {
+    if (bookingStep === 2 && (!selectedDate || !selectedTimeSlot)) {
       setFormError("Please choose both a preferred date and available time slot.");
       return;
     }
-    if (bookingStep === 4) {
+    if (bookingStep === 3) {
       if (!clientDetails.name || !clientDetails.email || !clientDetails.phone) {
         setFormError("Please fill out your name, email, and phone number.");
         return;
@@ -74,19 +73,18 @@ export const AppointmentForm = () => {
   return (
     <div className="max-w-4xl mx-auto glass-panel rounded-3xl p-6 md:p-10 border border-pink-500/20 shadow-2xl">
       {/* Step Indicator */}
-      {bookingStep < 5 && (
+      {bookingStep < 4 && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4 text-xs font-semibold text-slate-400">
             <span className={bookingStep >= 1 ? "text-pink-400 font-bold" : ""}>1. Service</span>
-            <span className={bookingStep >= 2 ? "text-pink-400 font-bold" : ""}>2. Specialist</span>
-            <span className={bookingStep >= 3 ? "text-pink-400 font-bold" : ""}>3. Date & Time</span>
-            <span className={bookingStep >= 4 ? "text-pink-400 font-bold" : ""}>4. Guest Details</span>
+            <span className={bookingStep >= 2 ? "text-pink-400 font-bold" : ""}>2. Date & Time</span>
+            <span className={bookingStep >= 3 ? "text-pink-400 font-bold" : ""}>3. Guest Details</span>
           </div>
 
           <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
             <div
               className="bg-gradient-to-r from-pink-500 to-amber-400 h-full transition-all duration-500 rounded-full"
-              style={{ width: `${(bookingStep / 4) * 100}%` }}
+              style={{ width: `${(bookingStep / 3) * 100}%` }}
             />
           </div>
         </div>
@@ -169,65 +167,13 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 2: Select Specialist */}
+      {/* Step 2: Pick Date & Time Slot */}
       {bookingStep === 2 && (
-        <div>
-          <h3 className="text-2xl font-bold font-serif-heading text-slate-100 mb-2">
-            Choose Your Specialist
-          </h3>
-          <p className="text-slate-400 text-sm mb-6">Pick your preferred aesthetic technician or hair artist</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {/* Any Available Option */}
-            <div
-              onClick={() => setSelectedStylist(null)}
-              className={`p-5 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${
-                selectedStylist === null
-                  ? "bg-pink-500/10 border-pink-500/60"
-                  : "bg-slate-900/60 border-slate-800"
-              }`}
-            >
-              <div className="w-12 h-12 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold">
-                <Sparkles size={24} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-100">Any Available Specialist</h4>
-                <p className="text-xs text-slate-400">First available expert at your scheduled time</p>
-              </div>
-            </div>
-
-            {STYLISTS.map((st) => {
-              const isSelected = selectedStylist?.id === st.id;
-              return (
-                <div
-                  key={st.id}
-                  onClick={() => setSelectedStylist(st)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${
-                    isSelected
-                      ? "bg-pink-500/10 border-pink-500/60 shadow-lg"
-                      : "bg-slate-900/60 border-slate-800 hover:border-slate-700"
-                  }`}
-                >
-                  <img src={st.avatar} alt={st.name} className="w-12 h-12 rounded-full object-cover border border-pink-500/30" />
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-100">{st.name}</h4>
-                    <p className="text-xs text-pink-400 font-medium">{st.role}</p>
-                    <span className="text-[11px] text-slate-400">Rating {st.rating} ⭐</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Pick Date & Time Slot */}
-      {bookingStep === 3 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-slate-100 mb-2">
             Select Date & Time Slot
           </h3>
-          <p className="text-slate-400 text-sm mb-6">Choose your arrival date and slot</p>
+          <p className="text-slate-400 text-sm mb-6">Choose your arrival date and preferred time slot</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
             <div>
@@ -271,8 +217,8 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 4: Client Info */}
-      {bookingStep === 4 && (
+      {/* Step 3: Client Info */}
+      {bookingStep === 3 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-slate-100 mb-2">
             Guest Details & Notes
@@ -306,7 +252,7 @@ export const AppointmentForm = () => {
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
                 <input
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+91 98765 43210"
                   value={clientDetails.phone}
                   onChange={(e) => setClientDetails({ ...clientDetails, phone: e.target.value })}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
@@ -328,8 +274,8 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 5: Booking Confirmation & Digital Pass */}
-      {bookingStep === 5 && lastConfirmedBooking && (
+      {/* Step 4: Booking Confirmation & Digital Pass */}
+      {bookingStep === 4 && lastConfirmedBooking && (
         <div className="text-center py-4">
           <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 size={36} />
@@ -356,7 +302,7 @@ export const AppointmentForm = () => {
             </div>
 
             <div className="space-y-2 text-xs text-slate-300 mb-6">
-              <p><span className="text-slate-500 font-semibold">Specialist:</span> {lastConfirmedBooking.stylistName}</p>
+              <p><span className="text-slate-500 font-semibold">Location:</span> Sugar Salon Marol, Andheri East</p>
               <p><span className="text-slate-500 font-semibold">Date & Time:</span> {lastConfirmedBooking.date} at {lastConfirmedBooking.timeSlot}</p>
               <p><span className="text-slate-500 font-semibold">Total Price:</span> {formatCurrency(lastConfirmedBooking.price)}</p>
             </div>
@@ -375,7 +321,7 @@ export const AppointmentForm = () => {
       )}
 
       {/* Control Buttons */}
-      {bookingStep < 5 && (
+      {bookingStep < 4 && (
         <div className="pt-6 border-t border-slate-800 flex items-center justify-between">
           <Button
             variant="outline"
@@ -387,7 +333,7 @@ export const AppointmentForm = () => {
           </Button>
 
           <Button variant="primary" size="md" onClick={handleNext}>
-            {bookingStep === 4 ? "Confirm Booking" : "Continue"} <ArrowRight size={16} className="ml-2" />
+            {bookingStep === 3 ? "Confirm Booking" : "Continue"} <ArrowRight size={16} className="ml-2" />
           </Button>
         </div>
       )}

@@ -1,8 +1,7 @@
 import React from "react";
 import { Sparkles, Heart, ShieldCheck, Award } from "lucide-react";
 import { SectionHeader } from "../../components/common/SectionHeader";
-import { SpecialistCard } from "../../components/cards/SpecialistCard";
-import { STYLISTS, SALON_INFO } from "../../constants";
+import { SALON_INFO } from "../../constants";
 import sugarSalonBrandImg from "../../assets/Logos/sugar salon.jpeg";
 
 export const AboutPage = () => {
@@ -54,19 +53,7 @@ export const AboutPage = () => {
         </div>
       </div>
 
-      {/* Team / Master Stylists */}
-      <section>
-        <SectionHeader
-          badge="Meet The Artists"
-          title="Our Master Stylists & Aestheticians"
-          subtitle="Passionate beauty experts dedicated to your radiance."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STYLISTS.map((stylist) => (
-            <SpecialistCard key={stylist.id} specialist={stylist} />
-          ))}
-        </div>
-      </section>
+
 
       {/* Salon Vibe & Atmosphere Grid */}
       <section className="glass-panel rounded-3xl p-8 md:p-12 border border-slate-800">
