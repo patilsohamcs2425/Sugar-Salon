@@ -182,3 +182,31 @@ export const addReview = async (reviewData) => {
   return newReview;
 };
 
+// --- INQUIRIES ---
+const INQUIRIES_STORAGE_KEY = "sugar_salon_inquiries";
+
+export const addInquiry = async (inquiryData) => {
+  const now = new Date().toISOString();
+  const newInquiry = {
+    id: `inq-${Date.now()}`,
+    createdAt: now,
+    status: "New",
+    ...inquiryData
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const inqRef = doc(db, "inquiries", newInquiry.id);
+      await setDoc(inqRef, newInquiry);
+    } catch (err) {
+      console.warn("Firestore addInquiry error, saving locally:", err.message);
+    }
+  }
+
+  const currentLocal = getStoredItem(INQUIRIES_STORAGE_KEY, []);
+  const validCurrent = Array.isArray(currentLocal) ? currentLocal : [];
+  const updated = [newInquiry, ...validCurrent];
+  setStoredItem(INQUIRIES_STORAGE_KEY, updated);
+  return newInquiry;
+};
+
