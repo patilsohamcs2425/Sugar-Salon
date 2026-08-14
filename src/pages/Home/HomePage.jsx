@@ -9,6 +9,7 @@ import { TestimonialCard } from "../../components/cards/TestimonialCard";
 import { MOCK_SERVICES, MOCK_OFFERS } from "../../data/mockData";
 import { useUnifiedReviews } from "../../hooks/useUnifiedReviews";
 import { SERVICE_CATEGORIES, SALON_INFO } from "../../constants";
+import sugarSalonBrandImg from "../../assets/Logos/sugar salon.jpeg";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -82,8 +83,8 @@ export const HomePage = () => {
             <div className="relative">
               <div className="relative z-10 rounded-3xl overflow-hidden border-2 border-pink-500/20 shadow-2xl shadow-pink-500/20 group">
                 <img
-                  src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1000&q=80"
-                  alt="Sugar Salon Marol Interior"
+                  src={sugarSalonBrandImg}
+                  alt="Sugar Salon Unisex Storefront"
                   className="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />

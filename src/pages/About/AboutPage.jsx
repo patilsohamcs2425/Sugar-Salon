@@ -3,6 +3,7 @@ import { Sparkles, Heart, ShieldCheck, Award } from "lucide-react";
 import { SectionHeader } from "../../components/common/SectionHeader";
 import { SpecialistCard } from "../../components/cards/SpecialistCard";
 import { STYLISTS, SALON_INFO } from "../../constants";
+import sugarSalonBrandImg from "../../assets/Logos/sugar salon.jpeg";
 
 export const AboutPage = () => {
   return (
@@ -81,8 +82,8 @@ export const AboutPage = () => {
             className="rounded-2xl h-48 w-full object-cover border border-slate-800"
           />
           <img
-            src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80"
-            alt="Lounge Area"
+            src={sugarSalonBrandImg}
+            alt="Sugar Salon Storefront & Lounge"
             className="rounded-2xl h-48 w-full object-cover border border-slate-800"
           />
           <img

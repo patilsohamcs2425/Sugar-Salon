@@ -56,17 +56,17 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Top-Left Logo Image */}
         <Link to="/" className="flex items-center group">
-          <div className="relative h-12 sm:h-14 flex items-center group-hover:scale-105 transition-transform">
+          <div className="relative h-14 sm:h-16 md:h-16 flex items-center group-hover:scale-105 transition-transform py-1">
             {logoLoaded ? (
               <img
                 src={logoPng || logoSvg}
                 alt="Sugar Salon Logo"
                 onError={() => setLogoLoaded(false)}
-                className="h-full w-auto object-contain max-w-[200px] drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]"
+                className="h-full w-auto object-contain max-w-[240px] sm:max-w-[280px] drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]"
               />
             ) : (
-              <div className="h-11 px-4 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-2xl flex items-center gap-2 text-slate-950 font-bold font-serif-heading border border-amber-300">
-                <Sparkles size={18} /> Sugar Salon
+              <div className="h-12 sm:h-14 px-4 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-2xl flex items-center gap-2 text-slate-950 font-bold font-serif-heading border border-amber-300 text-base sm:text-lg">
+                <Sparkles size={20} /> Sugar Salon
               </div>
             )}
           </div>
@@ -158,57 +158,84 @@ export const Navbar = () => {
         {/* Mobile menu toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-slate-300 hover:text-pink-400 rounded-xl bg-slate-900 border border-slate-800"
+          aria-label="Toggle Navigation Menu"
+          className="lg:hidden p-2.5 text-amber-300 hover:text-amber-200 rounded-xl bg-amber-500/10 border border-amber-500/30 active:scale-95 transition-all cursor-pointer"
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[70px] glass-panel border-b border-slate-800 p-6 shadow-2xl animate-fadeIn">
-          <div className="flex flex-col space-y-3 mb-6">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={(e) => handleNavClick(e, link)}
-                className="text-slate-200 hover:text-pink-400 text-sm font-semibold py-2 border-b border-slate-800/60 flex items-center justify-between"
-              >
-                <span>{link.name}</span>
-                {link.badge && (
-                  <span className="px-2 py-0.5 text-[9px] font-extrabold bg-pink-500 text-white rounded-full">
-                    {link.badge}
-                  </span>
-                )}
-              </Link>
-            ))}
+        <div className="lg:hidden fixed inset-x-0 top-[72px] glass-panel border-b border-amber-500/30 p-6 shadow-2xl animate-fadeIn max-h-[calc(100vh-80px)] overflow-y-auto bg-[#0d0a12]/95 backdrop-blur-2xl">
+          {/* Header inside mobile drawer with brand logo */}
+          <div className="flex items-center justify-between border-b border-amber-500/20 pb-4 mb-4">
+            <div className="flex items-center gap-3">
+              <img src={logoPng} alt="Sugar Salon" className="h-10 w-auto object-contain drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
+              <div>
+                <span className="text-sm font-bold font-serif-heading text-amber-300 block">Sugar Salon</span>
+                <span className="text-[10px] text-slate-400">Marol, Andheri East</span>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-[10px] text-amber-300 font-semibold">
+              Open Daily 11AM-9PM
+            </span>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col space-y-1.5 mb-6">
+            {NAV_LINKS.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={(e) => handleNavClick(e, link)}
+                  className={`text-sm font-semibold py-3 px-4 rounded-xl flex items-center justify-between transition-all ${
+                    isActive
+                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
+                      : "text-slate-200 hover:text-amber-300 hover:bg-amber-500/10 border border-transparent"
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  {link.badge && (
+                    <span className="px-2 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 rounded-full">
+                      {link.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-col gap-3 pt-2 border-t border-slate-800">
             {!user ? (
               <div className="grid grid-cols-2 gap-2">
-                <Button variant="secondary" size="sm" onClick={() => openAuthModal("login")}>
+                <Button variant="secondary" size="md" onClick={() => openAuthModal("login")}>
                   Sign In
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => openAuthModal("register")}>
+                <Button variant="outline" size="md" onClick={() => openAuthModal("register")}>
                   Sign Up
                 </Button>
               </div>
             ) : (
-              <div className="flex items-center justify-between bg-slate-900 p-3 rounded-2xl border border-slate-800">
-                <div className="flex items-center gap-2">
-                  <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
-                  <span className="text-xs font-bold text-slate-100">{user.name}</span>
+              <div className="flex items-center justify-between bg-slate-900/90 p-3 rounded-2xl border border-amber-500/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-xs">
+                    {user.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-100">{user.name}</p>
+                    <p className="text-[10px] text-amber-300 font-medium capitalize">{user.role || "VIP Guest"}</p>
+                  </div>
                 </div>
-                <button onClick={logout} className="text-xs text-rose-400 font-semibold">
+                <button onClick={logout} className="text-xs text-rose-400 font-semibold hover:underline">
                   Sign Out
                 </button>
               </div>
             )}
 
-            <Button variant="primary" size="md" className="w-full" onClick={handleBookClick}>
-              <Calendar size={16} className="mr-2" /> Book Appointment
+            <Button variant="primary" size="lg" className="w-full justify-center" onClick={handleBookClick}>
+              <Calendar size={18} className="mr-2" /> Book Appointment Now
             </Button>
           </div>
         </div>
