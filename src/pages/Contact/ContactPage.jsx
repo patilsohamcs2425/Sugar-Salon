@@ -76,9 +76,14 @@ export const ContactPage = () => {
                   <MessageSquare size={14} className="mr-1.5" /> WhatsApp Chat
                 </Button>
               </a>
-              <a href={SALON_INFO.socials.googleMaps} target="_blank" rel="noreferrer" className="w-full">
+              <a href={SALON_INFO.socials.facebook} target="_blank" rel="noreferrer" className="flex-1 min-w-[140px]">
+                <Button variant="secondary" size="sm" className="w-full text-blue-400 border-blue-500/30 hover:border-blue-400">
+                  <ExternalLink size={14} className="mr-1.5" /> Facebook Page
+                </Button>
+              </a>
+              <a href={SALON_INFO.socials.googleMaps} target="_blank" rel="noreferrer" className="flex-1 min-w-[140px]">
                 <Button variant="outline" size="sm" className="w-full">
-                  <ExternalLink size={14} className="mr-1.5" /> Open in Google Maps
+                  <ExternalLink size={14} className="mr-1.5" /> Google Maps
                 </Button>
               </a>
             </div>

@@ -13,6 +13,7 @@ export const SALON_INFO = {
   ],
   socials: {
     instagram: "https://www.instagram.com/sugarsalon.unisex?igsh=MWJzcmllMXlpYjM2dg==",
+    facebook: "https://www.facebook.com/SugarSalonAndheri/",
     googleMaps: "https://www.google.com/maps/place/Jawed+Habib+Hair+Studio+is+Sugar+Salon/@19.1185153,72.8804929,723m/data=!3m1!1e3!4m8!3m7!1s0x3be7c81748c38841:0x5d6bcd1d4fd43695!8m2!3d19.1185153!4d72.8804929!9m1!1b1!16s%2Fg%2F11j973pvw8?entry=ttu"
   }
 };
