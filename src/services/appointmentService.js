@@ -12,10 +12,7 @@ export const initLocalStorageData = () => {
   if (!localStorage.getItem(APPOINTMENTS_STORAGE_KEY)) {
     setStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
   }
-  const currentStoredServices = getStoredItem(SERVICES_STORAGE_KEY, []);
-  if (!localStorage.getItem(SERVICES_STORAGE_KEY) || (Array.isArray(currentStoredServices) && currentStoredServices.length !== MOCK_SERVICES.length)) {
-    setStoredItem(SERVICES_STORAGE_KEY, MOCK_SERVICES);
-  }
+  setStoredItem(SERVICES_STORAGE_KEY, MOCK_SERVICES);
 };
 
 // --- APPOINTMENTS ---
