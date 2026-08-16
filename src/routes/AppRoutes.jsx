@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout";
-import { AdminLayout } from "../layouts/AdminLayout";
 
 import { HomePage } from "../pages/Home/HomePage";
 import { AboutPage } from "../pages/About/AboutPage";
@@ -13,7 +12,6 @@ import { OffersPage } from "../pages/Offers/OffersPage";
 import { ContactPage } from "../pages/Contact/ContactPage";
 import { FeedbackPage } from "../pages/Feedback/FeedbackPage";
 import { AuthPage } from "../pages/Auth/AuthPage";
-import { AdminDashboard } from "../pages/Admin/AdminDashboard";
 
 export const AppRoutes = () => {
   return (
@@ -97,16 +95,6 @@ export const AppRoutes = () => {
           <MainLayout>
             <AuthPage />
           </MainLayout>
-        }
-      />
-
-      {/* Admin Route wrapped in AdminLayout */}
-      <Route
-        path="/admin"
-        element={
-          <AdminLayout>
-            <AdminDashboard />
-          </AdminLayout>
         }
       />
     </Routes>

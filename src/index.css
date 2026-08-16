@@ -32,6 +32,7 @@ body {
   color: #f8fafc;
   overflow-x: hidden;
   min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .font-serif-heading {
@@ -101,7 +102,22 @@ body {
   border-radius: inherit;
 }
 
-/* Custom Scrollbar */
+/* Hide scrollbar utility for clean mobile horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* iOS Safe Area Padding Support */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+
+/* Custom Scrollbar for Desktop */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

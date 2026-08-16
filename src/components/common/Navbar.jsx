@@ -128,14 +128,6 @@ export const Navbar = () => {
 
           {/* Right CTA Actions */}
           <div className="hidden lg:flex items-center gap-3">
-            {isAdmin && (
-              <Link to="/admin">
-                <span className="px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-semibold flex items-center gap-1.5 hover:bg-purple-500/30 transition-colors">
-                  <ShieldCheck size={14} /> Admin Portal
-                </span>
-              </Link>
-            )}
-
             {/* User Account Menu */}
             <div className="relative">
               {user ? (

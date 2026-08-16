@@ -133,15 +133,10 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} Sugar Salon (Marol, Andheri East, Mumbai). All Rights Reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link to="/admin" className="text-purple-400 hover:text-purple-300 transition-colors font-semibold flex items-center gap-1">
-              Admin Portal
-            </Link>
-            <div className="flex items-center gap-1">
-              <span>Crafted with</span>
-              <Heart size={14} className="text-rose-500 fill-rose-500 inline" />
-              <span>for timeless elegance</span>
-            </div>
+          <div className="flex items-center gap-1">
+            <span>Crafted with</span>
+            <Heart size={14} className="text-rose-500 fill-rose-500 inline" />
+            <span>for timeless elegance</span>
           </div>
         </div>
       </div>

@@ -203,13 +203,13 @@ export const HomePage = () => {
           subtitle="Explore our top-rated organic sugar waxing, O3+ whitening facials, and luxury styling experiences."
         />
 
-        {/* Category Filter Pills */}
-        <div className="flex items-center justify-center flex-wrap gap-2 mb-10">
+        {/* Category Filter Pills (Touch-scrollable on mobile) */}
+        <div className="flex items-center justify-start md:justify-center overflow-x-auto no-scrollbar gap-2 mb-8 pb-2 px-1 max-w-full">
           {SERVICE_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer whitespace-nowrap flex-shrink-0 ${
                 activeCategory === cat.id
                   ? "bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 font-bold shadow-lg shadow-amber-500/25 scale-105 border border-amber-300"
                   : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
