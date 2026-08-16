@@ -12,9 +12,7 @@ export const AuthModal = () => {
     setAuthModalTab,
     loginWithEmail,
     registerCustomer,
-    loginWithGoogle,
-    loginAsAdmin,
-    isFirebaseConfigured
+    loginWithGoogle
   } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -50,19 +48,19 @@ export const AuthModal = () => {
       title="Sugar Salon Guest Portal"
       maxWidth="max-w-md"
     >
-      <div className="space-y-5">
+      <div className="space-y-5 text-[#221A20]">
         {/* Security Indicator */}
-        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-pink-500/10 border border-pink-500/30 text-xs text-pink-300 font-medium">
+        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-amber-500/10 border border-[#D4AF37]/40 text-xs text-amber-900 font-bold">
           <span className="flex items-center gap-1.5 font-bold">
-            <Lock size={14} className="text-amber-400" /> Member Account Access
+            <Lock size={14} className="text-amber-700" /> Member Account Access
           </span>
-          <span className="text-[10px] bg-slate-900 px-2 py-0.5 rounded-full border border-slate-700 font-semibold text-slate-300">
+          <span className="text-[10px] bg-white px-2 py-0.5 rounded-full border border-[#D4AF37]/30 font-bold text-amber-900 shadow-sm">
             Encrypted Session
           </span>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-2 gap-1 p-1 bg-slate-900 rounded-2xl border border-slate-800">
+        <div className="grid grid-cols-2 gap-1 p-1 bg-[#FAF6F0] rounded-2xl border border-[#D4AF37]/30">
           <button
             type="button"
             onClick={() => {
@@ -71,8 +69,8 @@ export const AuthModal = () => {
             }}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
               authModalTab === "login"
-                ? "bg-pink-500 text-white shadow-md"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md"
+                : "text-[#5C4D56] hover:text-[#221A20]"
             }`}
           >
             Sign In
@@ -85,8 +83,8 @@ export const AuthModal = () => {
             }}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
               authModalTab === "register"
-                ? "bg-pink-500 text-white shadow-md"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md"
+                : "text-[#5C4D56] hover:text-[#221A20]"
             }`}
           >
             Create Account
@@ -94,7 +92,7 @@ export const AuthModal = () => {
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-semibold">
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-300 text-rose-700 text-xs font-bold">
             {errorMsg}
           </div>
         )}
@@ -103,7 +101,7 @@ export const AuthModal = () => {
         {authModalTab === "login" ? (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address</label>
               <div className="relative">
                 <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -112,13 +110,13 @@ export const AuthModal = () => {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2.5 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Password</label>
               <div className="relative">
                 <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -127,7 +125,7 @@ export const AuthModal = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2.5 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
@@ -140,7 +138,7 @@ export const AuthModal = () => {
           /* Sign Up Tab */
           <form onSubmit={handleRegisterSubmit} className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name *</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Full Name *</label>
               <div className="relative">
                 <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -149,13 +147,13 @@ export const AuthModal = () => {
                   placeholder="e.g. Shraddha Parab"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address *</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address *</label>
               <div className="relative">
                 <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -164,13 +162,13 @@ export const AuthModal = () => {
                   placeholder="shraddha@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Phone Number</label>
               <div className="relative">
                 <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -178,13 +176,13 @@ export const AuthModal = () => {
                   placeholder="098200 12345"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Password *</label>
+              <label className="block text-xs font-bold text-[#221A20] mb-1">Password *</label>
               <div className="relative">
                 <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -193,7 +191,7 @@ export const AuthModal = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
@@ -205,9 +203,9 @@ export const AuthModal = () => {
         )}
 
         {/* Divider & Google Auth */}
-        <div className="pt-2 border-t border-slate-800 space-y-3">
+        <div className="pt-2 border-t border-[#D4AF37]/20 space-y-3">
           <div className="relative flex items-center justify-center">
-            <span className="bg-slate-950 px-2 text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+            <span className="bg-[#FFFDF9] px-2 text-[10px] uppercase font-bold text-[#756570] tracking-wider">
               Or Connect With
             </span>
           </div>
@@ -215,7 +213,7 @@ export const AuthModal = () => {
           <button
             type="button"
             onClick={loginWithGoogle}
-            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 rounded-xl py-2.5 text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-amber-50/50 border border-[#D4AF37]/40 rounded-xl py-2.5 text-xs font-bold text-[#221A20] transition-all cursor-pointer shadow-sm"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path
@@ -236,18 +234,6 @@ export const AuthModal = () => {
               />
             </svg>
             Continue with Google
-          </button>
-
-          {/* Quick Admin Access */}
-          <button
-            type="button"
-            onClick={() => {
-              loginAsAdmin();
-              closeAuthModal();
-            }}
-            className="w-full flex items-center justify-center gap-2 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/40 rounded-xl py-2 text-xs font-bold text-purple-300 transition-colors cursor-pointer"
-          >
-            <Lock size={14} className="text-purple-400" /> Sign In as Admin Manager
           </button>
         </div>
       </div>

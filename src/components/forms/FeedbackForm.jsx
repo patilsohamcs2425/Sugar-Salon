@@ -39,13 +39,13 @@ export const FeedbackForm = ({ onReviewAdded }) => {
 
   if (submitted) {
     return (
-      <div className="glass-panel rounded-3xl p-8 text-center border border-pink-500/30">
-        <CheckCircle size={40} className="text-emerald-400 mx-auto mb-3" />
-        <h4 className="text-xl font-bold font-serif-heading text-slate-100 mb-2">
+      <div className="glass-panel rounded-3xl p-8 text-center border border-[#D4AF37]/35 bg-white text-[#221A20] shadow-xl">
+        <CheckCircle size={40} className="text-emerald-600 mx-auto mb-3" />
+        <h4 className="text-xl font-bold font-serif-heading text-[#221A20] mb-2">
           Thank You for Your Review!
         </h4>
-        <p className="text-xs text-slate-400 mb-4">
-          Your feedback has been saved to Firebase and will be visible live on our website!
+        <p className="text-xs text-[#665761] mb-4 font-medium">
+          Your feedback has been saved and is visible live on our website!
         </p>
         <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
           Submit Another Review
@@ -55,36 +55,36 @@ export const FeedbackForm = ({ onReviewAdded }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4 border border-slate-800">
-      <h3 className="text-xl font-bold font-serif-heading text-slate-100 mb-1">
+    <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4 border border-[#D4AF37]/35 bg-white text-[#221A20] shadow-xl">
+      <h3 className="text-xl font-bold font-serif-heading text-[#221A20] mb-1">
         Share Your Experience
       </h3>
-      <p className="text-xs text-slate-400 mb-4">Loved your treatment? Leave a rating & review stored on our website!</p>
+      <p className="text-xs text-[#665761] mb-4 font-medium">Loved your treatment? Leave a rating & review stored on our website!</p>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1">Your Name *</label>
+        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Name *</label>
         <input
           type="text"
           required
           placeholder="e.g. Maria Sharapova"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1">Treatment Experienced</label>
+        <label className="block text-xs font-bold text-[#221A20] mb-1">Treatment Experienced</label>
         <input
           type="text"
           value={service}
           onChange={(e) => setService(e.target.value)}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-2">Star Rating</label>
+        <label className="block text-xs font-bold text-[#221A20] mb-2">Star Rating</label>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -97,25 +97,25 @@ export const FeedbackForm = ({ onReviewAdded }) => {
                 size={24}
                 className={`${
                   star <= rating
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-slate-600"
+                    ? "fill-amber-500 text-amber-500"
+                    : "text-slate-300"
                 }`}
               />
             </button>
           ))}
-          <span className="text-xs font-bold text-amber-300 ml-2">{rating} Stars</span>
+          <span className="text-xs font-extrabold text-amber-900 ml-2">{rating} Stars</span>
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1">Your Review *</label>
+        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Review *</label>
         <textarea
           required
           rows={3}
           placeholder="How did your skin feel? What did you love about your treatment?..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
         />
       </div>
 
