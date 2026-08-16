@@ -6,7 +6,7 @@ import { MobileBottomBar } from "../components/common/MobileBottomBar";
 
 export const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-[#0b090e] text-slate-100 flex flex-col selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-[#FFFDF9] text-[#1A1418] flex flex-col selection:bg-amber-500 selection:text-white">
       <Navbar />
       <main className="flex-1 pt-20 sm:pt-24 pb-20 lg:pb-16">{children}</main>
       <Footer />
