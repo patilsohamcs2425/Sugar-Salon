@@ -15,11 +15,11 @@ export const SectionHeader = ({
           <Badge variant="gold">{badge}</Badge>
         </div>
       )}
-      <h2 className="text-3xl md:text-5xl font-bold font-serif-heading text-slate-100 tracking-tight mb-4">
+      <h2 className="text-3xl md:text-5xl font-extrabold font-serif-heading text-[#1A1418] tracking-tight mb-4">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        <p className="text-[#4A3E45] font-semibold text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
           {subtitle}
         </p>
       )}

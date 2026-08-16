@@ -13,7 +13,7 @@ export const GalleryPage = () => {
       : MOCK_GALLERY.filter((item) => item.category === selectedCat);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-[#1A1418]">
       <SectionHeader
         badge="Transformation Showcase"
         title="Before & After Beauty Results"
@@ -25,11 +25,12 @@ export const GalleryPage = () => {
         {SERVICE_CATEGORIES.map((cat) => (
           <button
             key={cat.id}
+            type="button"
             onClick={() => setSelectedCat(cat.id)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
+            className={`px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all cursor-pointer ${
               selectedCat === cat.id
-                ? "bg-pink-500 text-white shadow-lg shadow-pink-500/30 scale-105"
-                : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white font-extrabold shadow-md shadow-amber-600/20 scale-105"
+                : "bg-white text-[#5C4D56] hover:text-[#1A1418] border border-[#D4AF37]/30 shadow-sm"
             }`}
           >
             {cat.name}
