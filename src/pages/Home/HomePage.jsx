@@ -10,6 +10,7 @@ import { MOCK_SERVICES, MOCK_OFFERS } from "../../data/mockData";
 import { useUnifiedReviews } from "../../hooks/useUnifiedReviews";
 import { SERVICE_CATEGORIES, SALON_INFO } from "../../constants";
 import sugarSalonBrandImg from "../../assets/Logos/sugar salon.jpeg";
+import { AboutSection } from "../../components/sections/AboutSection";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -107,6 +108,9 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* About Us Section */}
+      <AboutSection />
 
       {/* AI / Smart Style Finder Teaser */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
