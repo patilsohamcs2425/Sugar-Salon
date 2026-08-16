@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Calendar, User, ShieldCheck, LogOut, Sparkles, Phone, MapPin, Clock } from "lucide-react";
+import { Menu, X, Calendar, User, LogOut, Sparkles, Phone, MapPin, Clock } from "lucide-react";
 import { NAV_LINKS, SALON_INFO } from "../../constants";
 import { Button } from "../ui/Button";
 import { useAuth } from "../../hooks/useAuth";
@@ -15,7 +15,7 @@ export const Navbar = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout, isAdmin, openAuthModal, requireAuth } = useAuth();
+  const { user, logout, openAuthModal, requireAuth } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +28,14 @@ export const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setUserDropdownOpen(false);
+    window.dispatchEvent(new CustomEvent("mobileMenuToggle", { detail: { open: false } }));
   }, [location.pathname]);
+
+  const toggleMobileMenu = () => {
+    const nextState = !mobileMenuOpen;
+    setMobileMenuOpen(nextState);
+    window.dispatchEvent(new CustomEvent("mobileMenuToggle", { detail: { open: nextState } }));
+  };
 
   const handleNavClick = (e, link) => {
     if (link.path === "/appointment") {
@@ -40,6 +47,8 @@ export const Navbar = () => {
   };
 
   const handleBookClick = () => {
+    setMobileMenuOpen(false);
+    window.dispatchEvent(new CustomEvent("mobileMenuToggle", { detail: { open: false } }));
     requireAuth(() => {
       navigate("/appointment");
     });
@@ -47,16 +56,16 @@ export const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
-      {/* Top Luxury Announcement & Utility Strip (Shiva's & Enrich Salon Style) */}
-      <div className={`bg-[#070509]/95 border-b border-amber-500/15 py-1.5 transition-all ${scrolled ? "hidden sm:block opacity-90" : "block"}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-slate-300">
+      {/* Top Luxury Announcement & Utility Strip */}
+      <div className={`bg-[#FAF6F0] border-b border-[#D4AF37]/25 py-1.5 transition-all ${scrolled ? "hidden sm:block opacity-90" : "block"}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-[#4A3E45]">
           <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
-            <span className="flex items-center gap-1 text-amber-300">
-              <MapPin size={12} className="text-amber-400" />
+            <span className="flex items-center gap-1 text-[#8C6B23] font-semibold">
+              <MapPin size={12} className="text-[#C5A059]" />
               <span>Marol Maroshi Rd, Andheri East, Mumbai</span>
             </span>
-            <span className="hidden md:inline-flex items-center gap-1 text-slate-400">
-              <Clock size={12} className="text-pink-400" />
+            <span className="hidden md:inline-flex items-center gap-1 text-[#665761]">
+              <Clock size={12} className="text-[#E83870]" />
               <span>Open Daily 11:00 AM – 9:00 PM</span>
             </span>
           </div>
@@ -64,9 +73,9 @@ export const Navbar = () => {
           <div className="flex items-center gap-4">
             <a
               href={`tel:${SALON_INFO.phone.replace(/\s+/g, "")}`}
-              className="flex items-center gap-1 text-amber-300 hover:text-amber-200 transition-colors font-medium"
+              className="flex items-center gap-1 text-[#8C6B23] hover:text-[#B88E2B] transition-colors font-bold"
             >
-              <Phone size={12} className="text-amber-400" />
+              <Phone size={12} className="text-[#C5A059]" />
               <span>Hotline: {SALON_INFO.phoneFormatted}</span>
             </a>
           </div>
@@ -77,8 +86,8 @@ export const Navbar = () => {
       <div
         className={`transition-all duration-300 ${
           scrolled
-            ? "bg-[#0b090e]/95 backdrop-blur-xl border-b border-amber-500/25 py-2.5 shadow-2xl shadow-amber-950/20"
-            : "bg-[#0b090e]/80 backdrop-blur-md py-3.5 border-b border-slate-800/80"
+            ? "bg-[#FFFDF9]/95 backdrop-blur-xl border-b border-[#D4AF37]/30 py-2.5 shadow-md shadow-amber-900/5"
+            : "bg-[#FFFDF9]/85 backdrop-blur-md py-3.5 border-b border-[#D4AF37]/20"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -90,10 +99,10 @@ export const Navbar = () => {
                   src={logoPng || logoSvg}
                   alt="Sugar Salon Logo"
                   onError={() => setLogoLoaded(false)}
-                  className="h-full w-auto object-contain max-w-[220px] sm:max-w-[260px] drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                  className="h-full w-auto object-contain max-w-[220px] sm:max-w-[260px] drop-shadow-sm"
                 />
               ) : (
-                <div className="h-10 sm:h-12 px-4 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-xl flex items-center gap-2 text-slate-950 font-bold font-serif-heading border border-amber-300 text-sm sm:text-base">
+                <div className="h-10 sm:h-12 px-4 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 rounded-xl flex items-center gap-2 text-white font-bold font-serif-heading border border-amber-300 text-sm sm:text-base">
                   <Sparkles size={18} /> Sugar Salon
                 </div>
               )}
@@ -101,7 +110,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#120e15]/90 p-1.5 rounded-full border border-amber-500/20 backdrop-blur-md shadow-inner">
+          <nav className="hidden lg:flex items-center gap-1 bg-[#FAF6F0]/90 p-1.5 rounded-full border border-[#D4AF37]/30 backdrop-blur-md shadow-sm">
             {NAV_LINKS.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -111,13 +120,13 @@ export const Navbar = () => {
                   onClick={(e) => handleNavClick(e, link)}
                   className={`relative px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 ${
                     isActive
-                      ? "text-amber-300 bg-amber-500/20 border border-amber-500/40 shadow-md shadow-amber-500/10"
-                      : "text-slate-300 hover:text-amber-300 hover:bg-amber-500/10"
+                      ? "text-amber-900 bg-amber-500/20 border border-[#D4AF37]/50 shadow-sm"
+                      : "text-slate-700 hover:text-amber-900 hover:bg-amber-500/10"
                   }`}
                 >
                   {link.name}
                   {link.badge && (
-                    <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 rounded-full">
+                    <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full">
                       {link.badge}
                     </span>
                   )}
@@ -133,10 +142,10 @@ export const Navbar = () => {
               {user ? (
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-colors cursor-pointer"
+                  className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-white border border-[#D4AF37]/40 hover:border-[#B88E2B] transition-colors cursor-pointer shadow-sm"
                 >
-                  <span className="text-xs font-medium text-amber-200">{user.name.split(" ")[0]}</span>
-                  <div className="w-7 h-7 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-[10px] uppercase">
+                  <span className="text-xs font-bold text-amber-900">{user.name.split(" ")[0]}</span>
+                  <div className="w-7 h-7 rounded-full bg-amber-500/20 text-amber-800 border border-amber-500/40 flex items-center justify-center font-bold text-[10px] uppercase">
                     {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
                   </div>
                 </button>
@@ -148,12 +157,12 @@ export const Navbar = () => {
 
               {/* Dropdown Menu */}
               {userDropdownOpen && user && (
-                <div className="absolute right-0 mt-3 w-56 glass-panel rounded-2xl p-2 border border-slate-700 shadow-2xl z-50 animate-fadeIn">
-                  <div className="p-3 border-b border-slate-800 mb-1">
-                    <p className="text-xs font-bold text-slate-100">{user.name}</p>
-                    <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
-                    <span className="inline-block mt-1 px-2 py-0.5 text-[9px] uppercase font-bold bg-pink-500/20 text-pink-300 rounded-full border border-pink-500/30">
-                      {user.role === "admin" ? "Salon Administrator" : user.tier || "VIP Guest"}
+                <div className="absolute right-0 mt-3 w-56 glass-panel rounded-2xl p-2 border border-[#D4AF37]/30 shadow-2xl z-50 animate-fadeIn">
+                  <div className="p-3 border-b border-[#D4AF37]/20 mb-1">
+                    <p className="text-xs font-bold text-[#221A20]">{user.name}</p>
+                    <p className="text-[11px] text-[#665761] truncate">{user.email}</p>
+                    <span className="inline-block mt-1 px-2 py-0.5 text-[9px] uppercase font-bold bg-pink-500/15 text-pink-700 rounded-full border border-pink-500/30">
+                      {user.tier || "VIP Guest"}
                     </span>
                   </div>
 
@@ -162,7 +171,7 @@ export const Navbar = () => {
                       logout();
                       setUserDropdownOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/20 rounded-xl transition-colors flex items-center gap-2 cursor-pointer"
+                    className="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-500/10 rounded-xl transition-colors flex items-center gap-2 cursor-pointer font-semibold"
                   >
                     <LogOut size={14} /> Sign Out
                   </button>
@@ -177,49 +186,52 @@ export const Navbar = () => {
 
           {/* Mobile menu toggle */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={toggleMobileMenu}
             aria-label="Toggle Navigation Menu"
-            className="lg:hidden p-2 text-amber-300 hover:text-amber-200 rounded-xl bg-amber-500/10 border border-amber-500/30 active:scale-95 transition-all cursor-pointer"
+            className="lg:hidden p-2 text-amber-900 hover:text-amber-800 rounded-xl bg-amber-500/15 border border-[#D4AF37]/40 active:scale-95 transition-all cursor-pointer"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Full-screen Overlay Mobile Drawer (Clean, Unblocked Mobile Menu) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[88px] glass-panel border-b border-amber-500/30 p-6 shadow-2xl animate-fadeIn max-h-[calc(100vh-90px)] overflow-y-auto bg-[#0d0a12]/98 backdrop-blur-2xl">
+        <div className="lg:hidden fixed inset-0 top-[72px] z-[60] glass-panel border-t border-[#D4AF37]/30 p-6 shadow-2xl animate-fadeIn overflow-y-auto pb-40 bg-[#FFFDF9]/98 backdrop-blur-2xl text-[#221A20]">
           {/* Header inside mobile drawer with brand logo */}
-          <div className="flex items-center justify-between border-b border-amber-500/20 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-[#D4AF37]/20 pb-4 mb-4">
             <div className="flex items-center gap-3">
-              <img src={logoPng} alt="Sugar Salon" className="h-9 w-auto object-contain drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
+              <img src={logoPng} alt="Sugar Salon" className="h-9 w-auto object-contain drop-shadow-sm" />
               <div>
-                <span className="text-sm font-bold font-serif-heading text-amber-300 block">Sugar Salon</span>
-                <span className="text-[10px] text-slate-400">Marol, Andheri East</span>
+                <span className="text-sm font-bold font-serif-heading text-[#8C6B23] block">Sugar Salon</span>
+                <span className="text-[10px] text-[#665761]">Marol, Andheri East</span>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-[10px] text-amber-300 font-semibold">
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 border border-[#D4AF37]/30 text-[10px] text-amber-900 font-bold">
               Open Daily 11AM-9PM
             </span>
           </div>
 
-          <div className="flex flex-col space-y-1.5 mb-6">
+          <div className="flex flex-col space-y-2 mb-6">
             {NAV_LINKS.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  onClick={(e) => handleNavClick(e, link)}
-                  className={`text-sm font-semibold py-3 px-4 rounded-xl flex items-center justify-between transition-all ${
+                  onClick={(e) => {
+                    handleNavClick(e, link);
+                    toggleMobileMenu();
+                  }}
+                  className={`text-sm font-bold py-3 px-4 rounded-xl flex items-center justify-between transition-all ${
                     isActive
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                      : "text-slate-200 hover:text-amber-300 hover:bg-amber-500/10 border border-transparent"
+                      ? "bg-amber-500/20 text-amber-900 border border-[#D4AF37]/50 shadow-sm"
+                      : "text-[#221A20] hover:bg-amber-500/10 border border-transparent"
                   }`}
                 >
                   <span>{link.name}</span>
                   {link.badge && (
-                    <span className="px-2 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 rounded-full">
+                    <span className="px-2 py-0.5 text-[9px] font-extrabold bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full">
                       {link.badge}
                     </span>
                   )}
@@ -228,34 +240,34 @@ export const Navbar = () => {
             })}
           </div>
 
-          <div className="flex flex-col gap-3 pt-2 border-t border-slate-800">
+          <div className="flex flex-col gap-4 pt-4 border-t border-[#D4AF37]/20">
             {!user ? (
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="secondary" size="md" onClick={() => openAuthModal("login")}>
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant="secondary" size="md" onClick={() => { toggleMobileMenu(); openAuthModal("login"); }}>
                   Sign In
                 </Button>
-                <Button variant="outline" size="md" onClick={() => openAuthModal("register")}>
+                <Button variant="outline" size="md" onClick={() => { toggleMobileMenu(); openAuthModal("register"); }}>
                   Sign Up
                 </Button>
               </div>
             ) : (
-              <div className="flex items-center justify-between bg-slate-900/90 p-3 rounded-2xl border border-amber-500/30">
+              <div className="flex items-center justify-between bg-white p-3 rounded-2xl border border-[#D4AF37]/30 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-xs">
+                  <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-900 border border-amber-500/40 flex items-center justify-center font-bold text-xs">
                     {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-100">{user.name}</p>
-                    <p className="text-[10px] text-amber-300 font-medium capitalize">{user.role || "VIP Guest"}</p>
+                    <p className="text-xs font-bold text-[#221A20]">{user.name}</p>
+                    <p className="text-[10px] text-amber-800 font-medium capitalize">{user.tier || "VIP Guest"}</p>
                   </div>
                 </div>
-                <button onClick={logout} className="text-xs text-rose-400 font-semibold hover:underline">
+                <button onClick={logout} className="text-xs text-rose-600 font-bold hover:underline">
                   Sign Out
                 </button>
               </div>
             )}
 
-            <Button variant="primary" size="lg" className="w-full justify-center" onClick={handleBookClick}>
+            <Button variant="primary" size="lg" className="w-full justify-center py-3.5 shadow-lg" onClick={handleBookClick}>
               <Calendar size={18} className="mr-2" /> Book Appointment Now
             </Button>
           </div>

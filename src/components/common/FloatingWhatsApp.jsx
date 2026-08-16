@@ -10,10 +10,10 @@ export const FloatingWhatsApp = () => {
       target="_blank"
       rel="noreferrer"
       aria-label="Chat with Sugar Salon on WhatsApp"
-      className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 group cursor-pointer"
+      className="fixed bottom-20 lg:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2 group cursor-pointer"
     >
       {/* Label Badge on Hover */}
-      <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/90 border border-emerald-500/40 text-emerald-300 text-xs font-bold shadow-2xl backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+      <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#221a20]/95 border border-emerald-500/40 text-emerald-300 text-xs font-bold shadow-2xl backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         WhatsApp 77386 13609
       </span>
@@ -21,10 +21,10 @@ export const FloatingWhatsApp = () => {
       {/* Floating Button Container */}
       <div className="relative">
         {/* Animated Ripple / Ping Effect */}
-        <span className="absolute -inset-1 rounded-full bg-emerald-500/50 animate-ping opacity-60 pointer-events-none" />
+        <span className="absolute -inset-1 rounded-full bg-emerald-500/40 animate-ping opacity-60 pointer-events-none" />
 
         {/* Circular Button */}
-        <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-[0_4px_20px_rgba(16,185,129,0.55)] transition-transform duration-300 group-hover:scale-110 active:scale-95 border-2 border-white/20">
+        <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-[0_6px_25px_rgba(16,185,129,0.45)] transition-transform duration-300 group-hover:scale-110 active:scale-95 border-2 border-white/40">
           <svg
             className="w-6 h-6 sm:w-7 sm:h-7 fill-current"
             viewBox="0 0 24 24"

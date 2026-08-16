@@ -5,7 +5,7 @@
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   
-  /* Champagne & Metallic Gold Palette matching logo */
+  /* Luxury Champagne & Warm Gold Palette */
   --color-gold-100: #fff9e6;
   --color-gold-200: #fff0ca;
   --color-gold-300: #f7df8b;
@@ -16,7 +16,10 @@
   --color-gold-800: #735a22;
   --color-gold-900: #4a3811;
 
-  /* Accent Rose & Sugar Pink */
+  /* Rose Quartz & Sugar Blush Palette */
+  --color-sugar-100: #fff0f5;
+  --color-sugar-200: #fde2e8;
+  --color-sugar-300: #f8c1ce;
   --color-sugar-400: #ff6696;
   --color-sugar-500: #e83870;
   --color-sugar-600: #c91850;
@@ -24,12 +27,12 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: #0b090e;
+  background-color: #fffdf9;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 90% 50%, rgba(232, 56, 112, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 10% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 55%);
-  color: #f8fafc;
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 90% 50%, rgba(232, 56, 112, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 10% 80%, rgba(212, 175, 55, 0.06) 0%, transparent 55%);
+  color: #221a20;
   overflow-x: hidden;
   min-height: 100vh;
   -webkit-tap-highlight-color: transparent;
@@ -39,50 +42,53 @@ body {
   font-family: var(--font-serif);
 }
 
-/* Glassmorphism & Metallic Gold Accent Styles */
+/* Warm Luxury Glassmorphism & Gold Accent Styles */
 .glass-panel {
-  background: rgba(18, 14, 22, 0.78);
+  background: rgba(255, 253, 249, 0.88);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 10px 30px -5px rgba(184, 142, 43, 0.07);
 }
 
 .glass-panel-light {
-  background: rgba(255, 250, 240, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 12px 36px -8px rgba(184, 142, 43, 0.1);
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(24, 18, 28, 0.85) 0%, rgba(12, 9, 14, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 246, 240, 0.92) 100%);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(212, 175, 55, 0.22);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 8px 24px -6px rgba(184, 142, 43, 0.08);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(229, 193, 88, 0.65);
-  box-shadow: 0 14px 40px -10px rgba(212, 175, 55, 0.28);
+  border-color: rgba(212, 175, 55, 0.65);
+  box-shadow: 0 16px 40px -10px rgba(197, 160, 89, 0.22);
   transform: translateY(-4px);
 }
 
 .glow-gold {
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
 }
 
 .glow-pink {
-  box-shadow: 0 0 25px rgba(232, 56, 112, 0.3);
+  box-shadow: 0 0 25px rgba(232, 56, 112, 0.2);
 }
 
 .gradient-text-gold {
-  background: linear-gradient(135deg, #FFF5D6 0%, #E5C158 45%, #D4AF37 75%, #9A7B38 100%);
+  background: linear-gradient(135deg, #a67c1e 0%, #d4af37 45%, #b88e2b 75%, #8c6b23 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-text-pink {
-  background: linear-gradient(135deg, #FFF5D6 0%, #E5C158 40%, #E83870 100%);
+  background: linear-gradient(135deg, #c91850 0%, #e83870 45%, #b88e2b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -124,11 +130,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b090e;
+  background: #fffdf9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2b2216;
+  background: #e8dcc8;
   border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 4px;
 }

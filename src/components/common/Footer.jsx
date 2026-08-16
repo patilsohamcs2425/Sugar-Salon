@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, MapPin, Phone, Mail, Clock, Heart } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Heart } from "lucide-react";
 import { SALON_INFO, NAV_LINKS, SERVICE_CATEGORIES } from "../../constants";
 import logoPng from "../../assets/Logos/logo.png";
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#08060a] border-t border-amber-500/20 pt-16 pb-12 relative overflow-hidden">
+    <footer className="bg-[#FAF6F0] border-t border-[#D4AF37]/30 pt-16 pb-12 relative overflow-hidden text-[#221A20]">
       {/* Background ambient glow */}
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -18,10 +18,10 @@ export const Footer = () => {
               <img
                 src={logoPng}
                 alt="Sugar Salon Logo"
-                className="h-16 w-auto object-contain drop-shadow-[0_0_12px_rgba(212,175,55,0.35)] group-hover:scale-105 transition-transform"
+                className="h-16 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform"
               />
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+            <p className="text-[#5C4D56] text-sm leading-relaxed mb-6 font-normal">
               Mumbai's premier organic sugar waxing and bespoke aesthetic beauty lounge in Marol, Andheri East. Dedicated to zero-pain smoothness and glowing confidence.
             </p>
             <div className="flex items-center gap-3">
@@ -29,7 +29,7 @@ export const Footer = () => {
                 href={SALON_INFO.socials.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-900 border border-amber-500/30 flex items-center justify-center text-amber-300 hover:text-amber-200 hover:border-amber-400 transition-colors"
+                className="w-9 h-9 rounded-full bg-white border border-[#D4AF37]/30 flex items-center justify-center text-[#8C6B23] hover:text-[#B88E2B] hover:border-[#D4AF37] transition-colors shadow-sm"
                 title="Instagram (@sugarsalon.unisex)"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ export const Footer = () => {
                 href={SALON_INFO.socials.facebook}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-900 border border-amber-500/30 flex items-center justify-center text-blue-400 hover:text-blue-300 hover:border-blue-400 transition-colors"
+                className="w-9 h-9 rounded-full bg-white border border-[#D4AF37]/30 flex items-center justify-center text-blue-600 hover:text-blue-700 transition-colors shadow-sm"
                 title="Facebook (@SugarSalonAndheri)"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -51,10 +51,10 @@ export const Footer = () => {
                 href={SALON_INFO.socials.googleMaps}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-900 border border-amber-500/30 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400 transition-colors"
+                className="w-9 h-9 rounded-full bg-white border border-[#D4AF37]/30 flex items-center justify-center text-slate-600 hover:text-amber-800 transition-colors shadow-sm"
                 title="Google Maps Location"
               >
-                <svg className="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 fill-current text-blue-600" viewBox="0 0 24 24">
                   <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.761H12.545z"/>
                 </svg>
               </a>
@@ -63,7 +63,7 @@ export const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-slate-100 font-bold font-serif-heading text-lg mb-4">
+            <h4 className="text-[#221A20] font-bold font-serif-heading text-lg mb-4">
               Quick Navigation
             </h4>
             <ul className="space-y-2.5">
@@ -71,9 +71,9 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-slate-400 hover:text-pink-400 text-sm transition-colors flex items-center gap-2"
+                    className="text-[#5C4D56] hover:text-[#E83870] text-sm transition-colors flex items-center gap-2 font-medium"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-pink-500/50" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E83870]/60" />
                     {link.name}
                   </Link>
                 </li>
@@ -83,7 +83,7 @@ export const Footer = () => {
 
           {/* Service Categories */}
           <div>
-            <h4 className="text-slate-100 font-bold font-serif-heading text-lg mb-4">
+            <h4 className="text-[#221A20] font-bold font-serif-heading text-lg mb-4">
               Signature Treatments
             </h4>
             <ul className="space-y-2.5">
@@ -91,9 +91,9 @@ export const Footer = () => {
                 <li key={cat.id}>
                   <Link
                     to={`/services?cat=${cat.id}`}
-                    className="text-slate-400 hover:text-pink-400 text-sm transition-colors flex items-center gap-2"
+                    className="text-[#5C4D56] hover:text-[#8C6B23] text-sm transition-colors flex items-center gap-2 font-medium"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400/50" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
                     {cat.name}
                   </Link>
                 </li>
@@ -103,40 +103,40 @@ export const Footer = () => {
 
           {/* Hours & Contact */}
           <div>
-            <h4 className="text-slate-100 font-bold font-serif-heading text-lg mb-4">
+            <h4 className="text-[#221A20] font-bold font-serif-heading text-lg mb-4">
               Salon Concierge
             </h4>
-            <ul className="space-y-3 text-sm text-slate-400 mb-6">
+            <ul className="space-y-3 text-sm text-[#5C4D56] mb-6">
               <li className="flex items-start gap-2.5">
-                <MapPin size={18} className="text-pink-400 flex-shrink-0 mt-0.5" />
+                <MapPin size={18} className="text-[#E83870] flex-shrink-0 mt-0.5" />
                 <span className="text-xs">{SALON_INFO.address}</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone size={18} className="text-pink-400 flex-shrink-0" />
+                <Phone size={18} className="text-[#E83870] flex-shrink-0" />
                 <span>{SALON_INFO.phoneFormatted}</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail size={18} className="text-pink-400 flex-shrink-0" />
+                <Mail size={18} className="text-[#E83870] flex-shrink-0" />
                 <span>{SALON_INFO.email}</span>
               </li>
             </ul>
 
-            <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
-              <div className="flex items-center gap-2 text-xs font-semibold text-amber-300 mb-1">
+            <div className="bg-white p-3.5 rounded-2xl border border-[#D4AF37]/30 shadow-sm">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#8C6B23] mb-1">
                 <Clock size={14} /> Opening Hours (7 Days)
               </div>
-              <p className="text-xs text-slate-300 font-bold">Mon - Sun: 11:00 AM - 9:00 PM</p>
+              <p className="text-xs text-[#221A20] font-extrabold">Mon - Sun: 11:00 AM - 9:00 PM</p>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <div className="pt-8 border-t border-[#D4AF37]/20 flex flex-col md:flex-row items-center justify-between text-xs text-[#756570] gap-4">
           <p>© {new Date().getFullYear()} Sugar Salon (Marol, Andheri East, Mumbai). All Rights Reserved.</p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 font-medium">
             <span>Crafted with</span>
-            <Heart size={14} className="text-rose-500 fill-rose-500 inline" />
-            <span>for timeless elegance</span>
+            <Heart size={14} className="text-[#E83870] fill-[#E83870] inline" />
+            <span>for timeless beauty</span>
           </div>
         </div>
       </div>
