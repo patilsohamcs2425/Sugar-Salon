@@ -4,9 +4,8 @@ import { Sparkles, Calendar, ArrowRight, ShieldCheck, Heart, Star, CheckCircle, 
 import { Button } from "../../components/ui/Button";
 import { SectionHeader } from "../../components/common/SectionHeader";
 import { ServiceCard } from "../../components/cards/ServiceCard";
-import { OfferCard } from "../../components/cards/OfferCard";
 import { TestimonialCard } from "../../components/cards/TestimonialCard";
-import { MOCK_SERVICES, MOCK_OFFERS } from "../../data/mockData";
+import { MOCK_SERVICES } from "../../data/mockData";
 import { useUnifiedReviews } from "../../hooks/useUnifiedReviews";
 import { SERVICE_CATEGORIES, SALON_INFO } from "../../constants";
 import sugarSalonBrandImg from "../../assets/Logos/sugar salon.jpeg";
@@ -218,20 +217,6 @@ export const HomePage = () => {
               className="rounded-2xl object-cover h-64 w-full border border-pink-500/20 mt-6"
             />
           </div>
-        </div>
-      </section>
-
-      {/* Special Offers Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          badge="Promotions"
-          title="Exclusive Salon Deals"
-          subtitle="Take advantage of our limited-time package discounts and welcome pass vouchers."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {MOCK_OFFERS.map((offer) => (
-            <OfferCard key={offer.id} offer={offer} />
-          ))}
         </div>
       </section>
 

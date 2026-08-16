@@ -25,7 +25,6 @@ export const NAV_LINKS = [
   { name: "AI Finder", path: "/recommendation", badge: "Smart Quiz" },
   { name: "Appointment", path: "/appointment" },
   { name: "Gallery", path: "/gallery" },
-  { name: "Offers", path: "/offers", badge: "Deals" },
   { name: "Feedback", path: "/feedback" },
   { name: "Contact", path: "/contact" }
 ];
