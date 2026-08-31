@@ -23,7 +23,7 @@ export const getAppointments = async () => {
       const aptsCol = collection(db, "appointments");
       const q = query(aptsCol, orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
-      const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+      const list = snapshot.docs.map((d) => ({ id: d.id, referenceId: d.id, ...d.data() }));
       if (list.length > 0) return list;
     } catch (err) {
       console.warn("Firestore getAppointments fallback to local:", err.message);
@@ -34,10 +34,15 @@ export const getAppointments = async () => {
 };
 
 export const createAppointment = async (appointmentData) => {
+  const refId = generateAppointmentId();
+  const now = new Date().toISOString();
+  
   const newAppointment = {
-    id: generateAppointmentId(),
+    id: refId,
+    referenceId: refId,
     status: "Confirmed",
-    createdAt: new Date().toISOString().split("T")[0],
+    createdAt: now,
+    createdDate: now.split("T")[0],
     ...appointmentData
   };
 
@@ -45,6 +50,7 @@ export const createAppointment = async (appointmentData) => {
     try {
       const aptRef = doc(db, "appointments", newAppointment.id);
       await setDoc(aptRef, newAppointment);
+      console.log("Appointment saved to Firebase Firestore:", newAppointment.id);
     } catch (err) {
       console.warn("Firestore createAppointment error, saving locally:", err.message);
     }
@@ -206,4 +212,3 @@ export const addInquiry = async (inquiryData) => {
   setStoredItem(INQUIRIES_STORAGE_KEY, updated);
   return newInquiry;
 };
-

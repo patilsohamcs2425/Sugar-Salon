@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
-import { Sparkles, Calendar, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, Plus } from "lucide-react";
+import { Sparkles, Calendar, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, Copy, Check, MessageSquare, Phone, Mail } from "lucide-react";
 import { useBooking } from "../../hooks/useBooking";
 import { MOCK_SERVICES } from "../../data/mockData";
+import { SALON_INFO } from "../../constants";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { formatCurrency } from "../../utils/formatters";
+import toast from "react-hot-toast";
 
 const ADDONS = [
   { id: "add-1", title: "Soothing Chamomile Post-Wax Cooling Mask", price: 25 },
@@ -14,9 +16,13 @@ const ADDONS = [
   { id: "add-4", title: "Glass-Skin Collagen Face Sheet", price: 30 }
 ];
 
+// Salon Operating Hours: 11:00 AM to 09:00 PM (Every 30 mins)
 const TIME_SLOTS = [
-  "09:30 AM", "10:30 AM", "11:30 AM", "01:00 PM",
-  "02:30 PM", "04:00 PM", "05:30 PM", "07:00 PM"
+  "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+  "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+  "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM",
+  "05:00 PM", "05:30 PM", "06:00 PM", "06:30 PM",
+  "07:00 PM", "07:30 PM", "08:00 PM", "08:30 PM"
 ];
 
 export const AppointmentForm = () => {
@@ -37,27 +43,44 @@ export const AppointmentForm = () => {
     setClientDetails,
     confirmBooking,
     lastConfirmedBooking,
-    resetBooking
+    resetBooking,
+    currentUser
   } = useBooking();
 
   const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [copiedRef, setCopiedRef] = useState(false);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setFormError("");
     if (bookingStep === 1 && !selectedService) {
       setFormError("Please select a service experience to continue.");
       return;
     }
     if (bookingStep === 2 && (!selectedDate || !selectedTimeSlot)) {
-      setFormError("Please choose both a preferred date and available time slot.");
+      setFormError("Please select both your preferred date and a time slot between 11:00 AM – 9:00 PM.");
       return;
     }
     if (bookingStep === 3) {
-      if (!clientDetails.name || !clientDetails.email || !clientDetails.phone) {
-        setFormError("Please fill out your name, email, and phone number.");
+      if (!clientDetails.name.trim()) {
+        setFormError("Please enter your full name.");
         return;
       }
-      confirmBooking();
+      if (!clientDetails.phone.trim()) {
+        setFormError("Please enter your contact phone number.");
+        return;
+      }
+
+      setIsSubmitting(true);
+      try {
+        await confirmBooking();
+        toast.success("Appointment booked successfully!");
+      } catch (err) {
+        console.error("Booking error:", err);
+        setFormError("Failed to create booking. Please try again or call concierge.");
+      } finally {
+        setIsSubmitting(false);
+      }
       return;
     }
     setBookingStep(bookingStep + 1);
@@ -70,7 +93,29 @@ export const AppointmentForm = () => {
     }
   };
 
-  const isConfirmed = bookingStep >= 4 || Boolean(lastConfirmedBooking);
+  const handleCopyRef = (refId) => {
+    navigator.clipboard.writeText(refId);
+    setCopiedRef(true);
+    toast.success("Reference ID copied to clipboard!");
+    setTimeout(() => setCopiedRef(false), 3000);
+  };
+
+  const isConfirmed = bookingStep >= 4 && Boolean(lastConfirmedBooking);
+
+  const getWhatsAppPassUrl = () => {
+    if (!lastConfirmedBooking) return "#";
+    const msg = encodeURIComponent(
+      `Hello Sugar Salon! I booked an appointment.\n\n` +
+      `📌 Reference ID: ${lastConfirmedBooking.referenceId || lastConfirmedBooking.id}\n` +
+      `👤 Name: ${lastConfirmedBooking.clientName}\n` +
+      `📞 Phone: ${lastConfirmedBooking.clientPhone}\n` +
+      `✨ Service: ${lastConfirmedBooking.serviceTitle}\n` +
+      `🗓 Date: ${lastConfirmedBooking.date}\n` +
+      `⏰ Time: ${lastConfirmedBooking.timeSlot}\n` +
+      `💰 Amount: ${formatCurrency(lastConfirmedBooking.price)}`
+    );
+    return `https://wa.me/${SALON_INFO.whatsapp}?text=${msg}`;
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-3xl p-6 md:p-10 border border-gray-200 shadow-sm text-gray-900">
@@ -79,8 +124,8 @@ export const AppointmentForm = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-3 text-xs font-bold text-gray-500">
             <span className={bookingStep >= 1 ? "text-amber-900 font-extrabold" : ""}>1. Service & Addons</span>
-            <span className={bookingStep >= 2 ? "text-amber-900 font-extrabold" : ""}>2. Date & Time</span>
-            <span className={bookingStep >= 3 ? "text-amber-900 font-extrabold" : ""}>3. Guest Details</span>
+            <span className={bookingStep >= 2 ? "text-amber-900 font-extrabold" : ""}>2. Date & Time (11am - 9pm)</span>
+            <span className={bookingStep >= 3 ? "text-amber-900 font-extrabold" : ""}>3. Customer Details</span>
           </div>
 
           <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden border border-gray-200">
@@ -102,9 +147,9 @@ export const AppointmentForm = () => {
       {bookingStep === 1 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
-            Select Service & Add-ons
+            Select Your Treatment
           </h3>
-          <p className="text-gray-500 text-sm mb-6 font-normal">Choose your primary treatment experience</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">Choose from our signature salon rituals and packages</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {MOCK_SERVICES.map((service) => {
@@ -127,7 +172,10 @@ export const AppointmentForm = () => {
                     />
                     <div>
                       <h4 className="text-sm font-bold text-gray-900">{service.title}</h4>
-                      <span className="text-xs font-extrabold text-amber-900">{formatCurrency(service.price)}</span>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-extrabold text-amber-900">{formatCurrency(service.price)}</span>
+                        <span className="text-[11px] text-gray-400">• {service.duration}</span>
+                      </div>
                     </div>
                   </div>
                   {isSelected && <CheckCircle2 className="text-amber-600" size={22} />}
@@ -136,7 +184,7 @@ export const AppointmentForm = () => {
             })}
           </div>
 
-          <h4 className="text-sm font-bold text-gray-900 mb-3">Custom Add-on Enhancements</h4>
+          <h4 className="text-sm font-bold text-gray-900 mb-3">Optional Add-on Enhancements</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
             {ADDONS.map((addon) => {
               const isAddonSelected = selectedAddons.some((a) => a.id === addon.id);
@@ -159,17 +207,19 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 2: Date & Time */}
+      {/* Step 2: Date & Time (11 AM to 9 PM) */}
       {bookingStep === 2 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
             Choose Preferred Date & Time
           </h3>
-          <p className="text-gray-500 text-sm mb-6 font-normal">Select your salon visit slot</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">
+            Sugar Salon operates daily from <strong className="text-gray-800">11:00 AM to 09:00 PM</strong>
+          </p>
 
           <div className="space-y-6 mb-8">
             <div>
-              <label className="block text-xs font-bold text-gray-900 mb-2">Preferred Appointment Date</label>
+              <label className="block text-xs font-bold text-gray-900 mb-2">Select Appointment Date *</label>
               <input
                 type="date"
                 value={selectedDate}
@@ -180,8 +230,16 @@ export const AppointmentForm = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-900 mb-2">Available Time Slots</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-gray-900">Available Salon Slots (11:00 AM – 9:00 PM) *</label>
+                {selectedTimeSlot && (
+                  <span className="text-xs text-amber-900 font-extrabold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    Selected: {selectedTimeSlot}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
                 {TIME_SLOTS.map((slot) => {
                   const isSelected = selectedTimeSlot === slot;
                   return (
@@ -189,10 +247,10 @@ export const AppointmentForm = () => {
                       key={slot}
                       type="button"
                       onClick={() => setSelectedTimeSlot(slot)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer text-center ${
                         isSelected
-                          ? "bg-amber-600 text-white border-amber-600 shadow-xs"
-                          : "bg-white border-gray-200 text-gray-800 hover:border-gray-300"
+                          ? "bg-amber-600 text-white border-amber-600 shadow-xs scale-102"
+                          : "bg-white border-gray-200 text-gray-800 hover:border-amber-400 hover:bg-amber-50/30"
                       }`}
                     >
                       {slot}
@@ -205,85 +263,180 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 3: Client Info */}
+      {/* Step 3: Customer Details */}
       {bookingStep === 3 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
-            Guest Details & Notes
+            Customer Information
           </h3>
-          <p className="text-gray-500 text-sm mb-6 font-normal">Provide contact information for instant digital pass</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">
+            {currentUser
+              ? "Your details have been pre-filled from your signed-in account. You can review or edit below."
+              : "Enter your name and phone number to generate your instant digital booking pass."}
+          </p>
 
           <div className="space-y-4 mb-6">
             <div>
-              <label className="block text-xs font-bold text-gray-900 mb-1">Full Name *</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. Sophia Williams"
-                value={clientDetails.name}
-                onChange={(e) => setClientDetails({ ...clientDetails, name: e.target.value })}
-                className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
-              />
+              <label className="block text-xs font-bold text-gray-900 mb-1">
+                Full Name * {currentUser && <span className="text-amber-800 font-normal">(Auto-filled from Google)</span>}
+              </label>
+              <div className="relative">
+                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Rahul Sharma"
+                  value={clientDetails.name}
+                  onChange={(e) => setClientDetails({ ...clientDetails, name: e.target.value })}
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-gray-900 mb-1">Email Address *</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="sophia@example.com"
-                  value={clientDetails.email}
-                  onChange={(e) => setClientDetails({ ...clientDetails, email: e.target.value })}
-                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
-                />
-              </div>
-              <div>
                 <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number *</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="+91 98765 43210"
-                  value={clientDetails.phone}
-                  onChange={(e) => setClientDetails({ ...clientDetails, phone: e.target.value })}
-                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
-                />
+                <div className="relative">
+                  <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="+91 98765 43210"
+                    value={clientDetails.phone}
+                    onChange={(e) => setClientDetails({ ...clientDetails, phone: e.target.value })}
+                    className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Email Address</label>
+                <div className="relative">
+                  <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={clientDetails.email}
+                    onChange={(e) => setClientDetails({ ...clientDetails, email: e.target.value })}
+                    className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                  />
+                </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-900 mb-1">Special Requests / Allergies</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Special Requests / Notes (Optional)</label>
               <textarea
                 rows={3}
-                placeholder="Tell us about skin sensitivities, preferred hair products, or occasion..."
+                placeholder="Let us know if you have sensitive skin, allergies, or any custom preferences..."
                 value={clientDetails.notes}
                 onChange={(e) => setClientDetails({ ...clientDetails, notes: e.target.value })}
                 className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
+
+            {/* Summary Review Card */}
+            <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2 text-xs">
+              <div className="flex justify-between font-bold text-gray-900">
+                <span>Treatment:</span>
+                <span>{selectedService?.title}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Date & Time:</span>
+                <span className="font-semibold text-gray-900">{selectedDate} at {selectedTimeSlot}</span>
+              </div>
+              {selectedAddons.length > 0 && (
+                <div className="flex justify-between text-gray-600">
+                  <span>Addons ({selectedAddons.length}):</span>
+                  <span>{selectedAddons.map((a) => a.title).join(", ")}</span>
+                </div>
+              )}
+              <div className="flex justify-between font-extrabold text-amber-900 pt-2 border-t border-amber-200 text-sm">
+                <span>Total Amount:</span>
+                <span>
+                  {formatCurrency(
+                    (selectedService?.price || 0) +
+                    selectedAddons.reduce((sum, item) => sum + item.price, 0)
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Step 4+: Booking Confirmation & Digital Pass */}
+      {/* Step 4: Booking Confirmation & Digital Reference Pass */}
       {isConfirmed && lastConfirmedBooking && (
         <div className="text-center py-4 space-y-6">
           <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto mb-2 shadow-xs">
             <CheckCircle2 size={36} />
           </div>
-          <h3 className="text-2xl sm:text-3xl font-bold font-serif-heading text-gray-900">
-            Appointment Confirmed!
-          </h3>
-          <p className="text-xs text-gray-500">
-            Booking Pass ID: <span className="font-bold text-amber-900">{lastConfirmedBooking.id}</span>
-          </p>
 
-          <div className="bg-gray-50 p-6 sm:p-8 rounded-3xl border border-gray-200 inline-block text-center shadow-xs">
-            <div className="p-3 bg-white rounded-2xl inline-block border border-gray-200 shadow-xs mb-3">
-              <QRCode value={`SUGAR-SALON-${lastConfirmedBooking.id}`} size={140} />
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-bold font-serif-heading text-gray-900 mb-1">
+              Appointment Confirmed!
+            </h3>
+            <p className="text-xs text-gray-500">
+              Your appointment is registered in our salon backend. Present your reference ID or QR code upon arrival.
+            </p>
+          </div>
+
+          {/* Official Reference ID Box */}
+          <div className="max-w-md mx-auto bg-gray-50 p-6 rounded-3xl border border-gray-200 text-center shadow-xs space-y-4">
+            <div className="p-3 bg-white rounded-2xl inline-block border border-gray-200 shadow-2xs">
+              <QRCode value={lastConfirmedBooking.referenceId || lastConfirmedBooking.id} size={150} />
             </div>
-            <p className="text-xs font-bold text-gray-900">Present QR Code at Reception</p>
-            <p className="text-[11px] text-gray-500 mt-0.5">{lastConfirmedBooking.date} at {lastConfirmedBooking.timeSlot}</p>
+
+            <div>
+              <span className="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Booking Reference ID</span>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <span className="text-xl sm:text-2xl font-mono font-extrabold text-amber-900 bg-white px-3 py-1 rounded-xl border border-amber-200">
+                  {lastConfirmedBooking.referenceId || lastConfirmedBooking.id}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyRef(lastConfirmedBooking.referenceId || lastConfirmedBooking.id)}
+                  className="p-2 rounded-xl bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 cursor-pointer shadow-2xs"
+                  title="Copy Reference ID"
+                >
+                  {copiedRef ? <Check size={16} className="text-emerald-600" /> : <Copy size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="text-left text-xs space-y-1.5 pt-3 border-t border-gray-200 text-gray-700">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Guest Name:</span>
+                <span className="font-bold text-gray-900">{lastConfirmedBooking.clientName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Contact:</span>
+                <span className="font-semibold text-gray-900">{lastConfirmedBooking.clientPhone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Service:</span>
+                <span className="font-semibold text-gray-900">{lastConfirmedBooking.serviceTitle}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Date & Slot:</span>
+                <span className="font-bold text-amber-900">{lastConfirmedBooking.date} at {lastConfirmedBooking.timeSlot}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Total Price:</span>
+                <span className="font-extrabold text-amber-900">{formatCurrency(lastConfirmedBooking.price)}</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <a
+                href={getWhatsAppPassUrl()}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all"
+              >
+                <MessageSquare size={16} /> Share Reference with Salon WhatsApp
+              </a>
+            </div>
           </div>
 
           <div className="pt-2">
@@ -298,13 +451,15 @@ export const AppointmentForm = () => {
       {!isConfirmed && (
         <div className="flex items-center justify-between pt-6 border-t border-gray-100">
           {bookingStep > 1 ? (
-            <Button variant="ghost" size="sm" onClick={handlePrev}>
+            <Button variant="ghost" size="sm" onClick={handlePrev} disabled={isSubmitting}>
               <ArrowLeft size={16} className="mr-1 text-amber-700" /> Back
             </Button>
           ) : <div />}
 
-          <Button variant="primary" size="md" onClick={handleNext}>
-            {bookingStep === 3 ? "Confirm & Book" : "Continue"} <ArrowRight size={16} className="ml-1" />
+          <Button variant="primary" size="md" onClick={handleNext} disabled={isSubmitting}>
+            {bookingStep === 3
+              ? (isSubmitting ? "Confirming Booking..." : "Confirm & Book")
+              : "Continue"} <ArrowRight size={16} className="ml-1" />
           </Button>
         </div>
       )}

@@ -18,8 +18,8 @@ export const formatDate = (dateString) => {
 };
 
 export const generateAppointmentId = () => {
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  return `SUGAR-${randomNum}`;
+  const randomNum = Math.floor(100000 + Math.random() * 900000);
+  return `SUGAR-REF-${randomNum}`;
 };
 
 export const getStoredItem = (key, fallback) => {

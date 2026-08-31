@@ -5,13 +5,13 @@ import {
 } from "recharts";
 import {
   DollarSign, Calendar, Users, Star, CheckCircle, Clock, XCircle,
-  Scissors, Plus, ShieldCheck, Sparkles
+  Scissors, Plus, ShieldCheck, Sparkles, Search, RefreshCw, Phone, Mail
 } from "lucide-react";
 import { getAppointments, updateAppointmentStatus, getServices } from "../../services/appointmentService";
 import { formatCurrency } from "../../utils/formatters";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
-import { Modal } from "../../components/ui/Modal";
+import toast from "react-hot-toast";
 
 const REVENUE_DATA = [
   { month: "Jan", revenue: 8400 },
@@ -32,22 +32,44 @@ const CATEGORY_PIE = [
 export const AdminDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [services, setServices] = useState([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("appointments");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
       const apts = await getAppointments();
       const srvs = await getServices();
       setAppointments(apts);
       setServices(srvs);
-    };
+    } catch (err) {
+      console.error("Failed to load admin data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
     const updated = await updateAppointmentStatus(id, newStatus);
     setAppointments(updated);
+    toast.success(`Booking ${id} marked as ${newStatus}`);
   };
+
+  const filteredAppointments = appointments.filter((apt) => {
+    if (!searchTerm.trim()) return true;
+    const term = searchTerm.toLowerCase();
+    const refId = (apt.referenceId || apt.id || "").toLowerCase();
+    const name = (apt.clientName || "").toLowerCase();
+    const phone = (apt.clientPhone || "").toLowerCase();
+    const email = (apt.clientEmail || "").toLowerCase();
+    const service = (apt.serviceTitle || "").toLowerCase();
+    return refId.includes(term) || name.includes(term) || phone.includes(term) || email.includes(term) || service.includes(term);
+  });
 
   return (
     <div className="space-y-8 bg-white text-gray-900">
@@ -60,35 +82,46 @@ export const AdminDashboard = () => {
               Sugar Salon Executive Portal
             </h1>
           </div>
-          <p className="text-xs text-gray-500">Live operational metrics, booking queues, and service menu configuration.</p>
+          <p className="text-xs text-gray-500">Live operational metrics, real customer verification, and Firestore appointment queue.</p>
         </div>
 
-        {/* Tab buttons */}
-        <div className="flex items-center gap-2 bg-gray-100 p-1.5 rounded-full border border-gray-200">
+        {/* Tab buttons & Refresh */}
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => setActiveTab("overview")}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-              activeTab === "overview" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
-            }`}
+            type="button"
+            onClick={fetchData}
+            className="p-2 rounded-full border border-gray-200 hover:bg-gray-100 text-gray-700 cursor-pointer shadow-2xs"
+            title="Refresh bookings from Firestore"
           >
-            Analytics
+            <RefreshCw size={16} className={isLoading ? "animate-spin text-amber-700" : ""} />
           </button>
-          <button
-            onClick={() => setActiveTab("appointments")}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-              activeTab === "appointments" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            Bookings ({appointments.length})
-          </button>
-          <button
-            onClick={() => setActiveTab("services")}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-              activeTab === "services" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            Services ({services.length})
-          </button>
+
+          <div className="flex items-center gap-1.5 bg-gray-100 p-1.5 rounded-full border border-gray-200">
+            <button
+              onClick={() => setActiveTab("appointments")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+                activeTab === "appointments" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Bookings ({appointments.length})
+            </button>
+            <button
+              onClick={() => setActiveTab("overview")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+                activeTab === "overview" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Analytics
+            </button>
+            <button
+              onClick={() => setActiveTab("services")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+                activeTab === "services" ? "bg-amber-600 text-white shadow-2xs" : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Services ({services.length})
+            </button>
+          </div>
         </div>
       </div>
 
@@ -96,24 +129,24 @@ export const AdminDashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-gray-500 uppercase font-bold">Monthly Revenue</span>
-            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 flex items-center justify-center">
-              <DollarSign size={18} />
-            </div>
-          </div>
-          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">$14,200</span>
-          <span className="text-[11px] text-emerald-700 font-bold block mt-1">+14% vs last month</span>
-        </div>
-
-        <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
-          <div className="flex items-center justify-between mb-4">
             <span className="text-xs text-gray-500 uppercase font-bold">Total Appointments</span>
             <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 flex items-center justify-center">
               <Calendar size={18} />
             </div>
           </div>
-          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">{appointments.length + 42}</span>
-          <span className="text-[11px] text-gray-500 block mt-1">12 Pending today</span>
+          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">{appointments.length}</span>
+          <span className="text-[11px] text-emerald-700 font-bold block mt-1">Live Backend Records</span>
+        </div>
+
+        <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs text-gray-500 uppercase font-bold">Monthly Revenue</span>
+            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 flex items-center justify-center">
+              <DollarSign size={18} />
+            </div>
+          </div>
+          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">₹1,42,000</span>
+          <span className="text-[11px] text-emerald-700 font-bold block mt-1">+14% vs last month</span>
         </div>
 
         <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
@@ -123,29 +156,138 @@ export const AdminDashboard = () => {
               <Star size={18} />
             </div>
           </div>
-          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">4.95 / 5.0</span>
-          <span className="text-[11px] text-amber-800 font-bold block mt-1">Top 1% Beauty Salon</span>
+          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">4.9 / 5.0</span>
+          <span className="text-[11px] text-amber-800 font-bold block mt-1">Verified Google Location</span>
         </div>
 
         <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-gray-500 uppercase font-bold">Active Specialists</span>
+            <span className="text-xs text-gray-500 uppercase font-bold">Salon Timings</span>
             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center">
-              <Users size={18} />
+              <Clock size={18} />
             </div>
           </div>
-          <span className="text-3xl font-extrabold text-gray-900 font-serif-heading">4 Masters</span>
-          <span className="text-[11px] text-emerald-700 font-bold block mt-1">Full shift covered</span>
+          <span className="text-xl font-extrabold text-gray-900 font-serif-heading">11 AM – 9 PM</span>
+          <span className="text-[11px] text-emerald-700 font-bold block mt-1">Open 7 Days a Week</span>
         </div>
       </div>
+
+      {/* Tab Content: Appointments Queue with Search / Customer Verification */}
+      {activeTab === "appointments" && (
+        <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold font-serif-heading text-gray-900">
+                Customer Appointments & Reference Verification
+              </h3>
+              <p className="text-xs text-gray-500">Lookup customer bookings by Reference ID, Name, or Phone number.</p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative min-w-[280px]">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search Reference ID (SUGAR-REF-...) or Name"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-amber-500 shadow-2xs font-medium"
+              />
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-gray-200 text-gray-500 uppercase tracking-wider font-bold bg-gray-50/50">
+                <tr>
+                  <th className="py-3 px-4">Reference ID</th>
+                  <th className="py-3 px-4">Customer Details</th>
+                  <th className="py-3 px-4">Service Experience</th>
+                  <th className="py-3 px-4">Date & Slot</th>
+                  <th className="py-3 px-4">Amount</th>
+                  <th className="py-3 px-4">Verification</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-gray-800">
+                {filteredAppointments.length > 0 ? (
+                  filteredAppointments.map((apt) => (
+                    <tr key={apt.id} className="hover:bg-amber-50/20 transition-colors">
+                      <td className="py-3.5 px-4">
+                        <span className="font-mono font-extrabold text-amber-900 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200 block whitespace-nowrap">
+                          {apt.referenceId || apt.id}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-gray-900">{apt.clientName}</div>
+                        <div className="text-[11px] text-gray-600 flex items-center gap-1 mt-0.5">
+                          <Phone size={10} className="text-amber-700" /> {apt.clientPhone || "No phone provided"}
+                        </div>
+                        {apt.clientEmail && (
+                          <div className="text-[11px] text-gray-400 flex items-center gap-1">
+                            <Mail size={10} /> {apt.clientEmail}
+                          </div>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-700">
+                        <div className="font-medium text-gray-900">{apt.serviceTitle}</div>
+                        {apt.addons && apt.addons.length > 0 && (
+                          <div className="text-[10px] text-amber-800 font-semibold">
+                            +{apt.addons.join(", ")}
+                          </div>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
+                        <div className="font-bold text-gray-900">{apt.date}</div>
+                        <div className="text-[11px] text-amber-900 font-semibold">{apt.timeSlot}</div>
+                      </td>
+                      <td className="py-3.5 px-4 font-extrabold text-amber-900 whitespace-nowrap">
+                        {formatCurrency(apt.price)}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {apt.isGoogleUser ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 whitespace-nowrap">
+                            <Sparkles size={10} /> Google User
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-700 border border-gray-200 whitespace-nowrap">
+                            Guest Booking
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-right space-x-2 whitespace-nowrap">
+                        {apt.status !== "Completed" ? (
+                          <button
+                            onClick={() => handleStatusChange(apt.id, "Completed")}
+                            className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 text-[10px] font-bold cursor-pointer transition-colors shadow-2xs"
+                          >
+                            Mark Complete
+                          </button>
+                        ) : (
+                          <Badge variant="emerald">Completed</Badge>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="text-center py-8 text-gray-500">
+                      No appointments matching "{searchTerm}".
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Tab Content: Analytics */}
       {activeTab === "overview" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Revenue Bar Chart */}
           <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
             <h3 className="text-lg font-bold font-serif-heading text-gray-900 mb-6">
-              Monthly Revenue Performance ($)
+              Monthly Revenue Performance (INR)
             </h3>
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -161,7 +303,6 @@ export const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Category Pie Chart */}
           <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs flex flex-col justify-between">
             <h3 className="text-lg font-bold font-serif-heading text-gray-900 mb-4">
               Service Category Share
@@ -189,67 +330,6 @@ export const AdminDashboard = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tab Content: Appointments Queue */}
-      {activeTab === "appointments" && (
-        <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-2xs">
-          <h3 className="text-lg font-bold font-serif-heading text-gray-900 mb-6">
-            Scheduled Guest Appointments
-          </h3>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-gray-200 text-gray-500 uppercase tracking-wider font-bold">
-                <tr>
-                  <th className="py-3 px-4">Booking ID</th>
-                  <th className="py-3 px-4">Client Name</th>
-                  <th className="py-3 px-4">Service Experience</th>
-                  <th className="py-3 px-4">Specialist</th>
-                  <th className="py-3 px-4">Date & Time</th>
-                  <th className="py-3 px-4">Amount</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 text-gray-800">
-                {appointments.map((apt) => (
-                  <tr key={apt.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-bold text-amber-900">{apt.id}</td>
-                    <td className="py-3.5 px-4 font-bold text-gray-900">{apt.clientName}</td>
-                    <td className="py-3.5 px-4 text-gray-700">{apt.serviceTitle}</td>
-                    <td className="py-3.5 px-4 text-amber-800 font-semibold">{apt.stylistName}</td>
-                    <td className="py-3.5 px-4 text-gray-600">{apt.date} at {apt.timeSlot}</td>
-                    <td className="py-3.5 px-4 font-bold text-amber-900">{formatCurrency(apt.price)}</td>
-                    <td className="py-3.5 px-4">
-                      <Badge
-                        variant={
-                          apt.status === "Confirmed"
-                            ? "gold"
-                            : apt.status === "Completed"
-                            ? "emerald"
-                            : "slate"
-                        }
-                      >
-                        {apt.status}
-                      </Badge>
-                    </td>
-                    <td className="py-3.5 px-4 text-right space-x-2">
-                      {apt.status !== "Completed" && (
-                        <button
-                          onClick={() => handleStatusChange(apt.id, "Completed")}
-                          className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 text-[10px] font-bold cursor-pointer"
-                        >
-                          Mark Complete
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       )}

@@ -1,9 +1,11 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { createAppointment } from "../services/appointmentService";
+import { useAuth } from "../hooks/useAuth";
 
 const BookingContext = createContext();
 
 export const BookingProvider = ({ children }) => {
+  const { user } = useAuth();
   const [bookingStep, setBookingStep] = useState(1);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedStylist, setSelectedStylist] = useState(null);
@@ -18,6 +20,18 @@ export const BookingProvider = ({ children }) => {
   });
   const [lastConfirmedBooking, setLastConfirmedBooking] = useState(null);
 
+  // Auto-populate user details when logged in with Google/Email
+  useEffect(() => {
+    if (user) {
+      setClientDetails((prev) => ({
+        ...prev,
+        name: prev.name || user.name || user.displayName || "",
+        email: prev.email || user.email || "",
+        phone: prev.phone || user.phone || ""
+      }));
+    }
+  }, [user]);
+
   const resetBooking = () => {
     setBookingStep(1);
     setSelectedService(null);
@@ -25,12 +39,17 @@ export const BookingProvider = ({ children }) => {
     setSelectedDate("");
     setSelectedTimeSlot("");
     setSelectedAddons([]);
-    setClientDetails({ name: "", email: "", phone: "", notes: "" });
+    setClientDetails({
+      name: user?.name || user?.displayName || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+      notes: ""
+    });
   };
 
   const startBookingForService = (service) => {
     setSelectedService(service);
-    setBookingStep(2); // Jump straight to stylist / date selection
+    setBookingStep(2); // Jump straight to date & time selection
   };
 
   const toggleAddon = (addon) => {
@@ -51,21 +70,25 @@ export const BookingProvider = ({ children }) => {
       selectedAddons.reduce((sum, item) => sum + item.price, 0);
 
     const bookingPayload = {
-      clientName: clientDetails.name,
-      clientEmail: clientDetails.email,
-      clientPhone: clientDetails.phone,
+      clientName: clientDetails.name.trim(),
+      clientEmail: clientDetails.email.trim(),
+      clientPhone: clientDetails.phone.trim(),
       serviceTitle: selectedService.title,
-      stylistName: selectedStylist ? selectedStylist.name : "Any Available Specialist",
+      serviceId: selectedService.id || "",
+      serviceImage: selectedService.image || "",
+      stylistName: selectedStylist ? selectedStylist.name : "Master Specialist",
       date: selectedDate,
       timeSlot: selectedTimeSlot,
       price: totalPrice,
       addons: selectedAddons.map((a) => a.title),
-      notes: clientDetails.notes
+      notes: clientDetails.notes || "",
+      userId: user?.id || user?.uid || "guest",
+      isGoogleUser: Boolean(user)
     };
 
     const created = await createAppointment(bookingPayload);
     setLastConfirmedBooking(created);
-    setBookingStep(5); // Confirmation screen
+    setBookingStep(4); // Confirmation screen
     return created;
   };
 
@@ -89,7 +112,8 @@ export const BookingProvider = ({ children }) => {
         startBookingForService,
         confirmBooking,
         lastConfirmedBooking,
-        resetBooking
+        resetBooking,
+        currentUser: user
       }}
     >
       {children}
