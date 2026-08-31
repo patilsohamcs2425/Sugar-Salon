@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
-import { Sparkles, Calendar, Clock, User, CheckCircle2, ArrowRight, ArrowLeft, Copy, Check, MessageSquare, Phone, Mail } from "lucide-react";
+import {
+  Sparkles, Calendar, Clock, User, CheckCircle2, ArrowRight,
+  ArrowLeft, Copy, Check, MessageSquare, Phone, Mail, AlertCircle
+} from "lucide-react";
 import { useBooking } from "../../hooks/useBooking";
 import { MOCK_SERVICES } from "../../data/mockData";
 import { SALON_INFO } from "../../constants";
@@ -48,8 +51,47 @@ export const AppointmentForm = () => {
   } = useBooking();
 
   const [formError, setFormError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    name: "",
+    phone: "",
+    email: ""
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedRef, setCopiedRef] = useState(false);
+
+  const validateStep3 = () => {
+    const errors = { name: "", phone: "", email: "" };
+    let hasError = false;
+
+    // Full Name check
+    if (!clientDetails.name || !clientDetails.name.trim()) {
+      errors.name = "Full Name is required to confirm booking.";
+      hasError = true;
+    }
+
+    // Phone Number check (min 8 digits)
+    const phoneDigits = (clientDetails.phone || "").replace(/\D/g, "");
+    if (!clientDetails.phone || !clientDetails.phone.trim()) {
+      errors.phone = "Phone number is required for SMS & WhatsApp pass.";
+      hasError = true;
+    } else if (phoneDigits.length < 8) {
+      errors.phone = "Please enter a valid phone number (at least 8–10 digits).";
+      hasError = true;
+    }
+
+    // Email check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!clientDetails.email || !clientDetails.email.trim()) {
+      errors.email = "Email address is required for booking receipt.";
+      hasError = true;
+    } else if (!emailRegex.test(clientDetails.email.trim())) {
+      errors.email = "Please enter a valid email address (e.g. name@example.com).";
+      hasError = true;
+    }
+
+    setFieldErrors(errors);
+    return !hasError;
+  };
 
   const handleNext = async () => {
     setFormError("");
@@ -62,12 +104,10 @@ export const AppointmentForm = () => {
       return;
     }
     if (bookingStep === 3) {
-      if (!clientDetails.name.trim()) {
-        setFormError("Please enter your full name.");
-        return;
-      }
-      if (!clientDetails.phone.trim()) {
-        setFormError("Please enter your contact phone number.");
+      const isValid = validateStep3();
+      if (!isValid) {
+        setFormError("Please fill in all mandatory fields (Name, Phone Number, and Email) marked below.");
+        toast.error("Please fill in Name, Phone Number, and Email!");
         return;
       }
 
@@ -77,7 +117,7 @@ export const AppointmentForm = () => {
         toast.success("Appointment booked successfully!");
       } catch (err) {
         console.error("Booking error:", err);
-        setFormError("Failed to create booking. Please try again or call concierge.");
+        setFormError(err.message || "Failed to create booking. Please try again.");
       } finally {
         setIsSubmitting(false);
       }
@@ -88,8 +128,19 @@ export const AppointmentForm = () => {
 
   const handlePrev = () => {
     setFormError("");
+    setFieldErrors({ name: "", phone: "", email: "" });
     if (bookingStep > 1) {
       setBookingStep(bookingStep - 1);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setClientDetails({ ...clientDetails, [field]: value });
+    if (fieldErrors[field]) {
+      setFieldErrors({ ...fieldErrors, [field]: "" });
+    }
+    if (formError) {
+      setFormError("");
     }
   };
 
@@ -109,6 +160,7 @@ export const AppointmentForm = () => {
       `📌 Reference ID: ${lastConfirmedBooking.referenceId || lastConfirmedBooking.id}\n` +
       `👤 Name: ${lastConfirmedBooking.clientName}\n` +
       `📞 Phone: ${lastConfirmedBooking.clientPhone}\n` +
+      `✉️ Email: ${lastConfirmedBooking.clientEmail}\n` +
       `✨ Service: ${lastConfirmedBooking.serviceTitle}\n` +
       `🗓 Date: ${lastConfirmedBooking.date}\n` +
       `⏰ Time: ${lastConfirmedBooking.timeSlot}\n` +
@@ -125,7 +177,7 @@ export const AppointmentForm = () => {
           <div className="flex items-center justify-between mb-3 text-xs font-bold text-gray-500">
             <span className={bookingStep >= 1 ? "text-amber-900 font-extrabold" : ""}>1. Service & Addons</span>
             <span className={bookingStep >= 2 ? "text-amber-900 font-extrabold" : ""}>2. Date & Time (11am - 9pm)</span>
-            <span className={bookingStep >= 3 ? "text-amber-900 font-extrabold" : ""}>3. Customer Details</span>
+            <span className={bookingStep >= 3 ? "text-amber-900 font-extrabold" : ""}>3. Customer Details (Required)</span>
           </div>
 
           <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden border border-gray-200">
@@ -138,8 +190,9 @@ export const AppointmentForm = () => {
       )}
 
       {formError && (
-        <div className="mb-6 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold">
-          {formError}
+        <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-800 text-xs font-bold flex items-center gap-2 animate-shake">
+          <AlertCircle size={18} className="text-rose-600 shrink-0" />
+          <span>{formError}</span>
         </div>
       )}
 
@@ -263,74 +316,117 @@ export const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Step 3: Customer Details */}
+      {/* Step 3: Customer Details with Explicit Mandatory Indicators */}
       {bookingStep === 3 && (
         <div>
           <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
             Customer Information
           </h3>
           <p className="text-gray-500 text-sm mb-6 font-normal">
-            {currentUser
-              ? "Your details have been pre-filled from your signed-in account. You can review or edit below."
-              : "Enter your name and phone number to generate your instant digital booking pass."}
+            Please fill in your contact details below. All fields marked with <span className="text-rose-600 font-bold">*</span> are mandatory for confirming your appointment.
           </p>
 
-          <div className="space-y-4 mb-6">
+          <div className="space-y-5 mb-6">
+            {/* Full Name Input */}
             <div>
-              <label className="block text-xs font-bold text-gray-900 mb-1">
-                Full Name * {currentUser && <span className="text-amber-800 font-normal">(Auto-filled from Google)</span>}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-gray-900">
+                  Full Name <span className="text-rose-600 font-bold">*</span>
+                </label>
+                {currentUser && (
+                  <span className="text-[11px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                    Auto-filled from Google
+                  </span>
+                )}
+              </div>
+
               <div className="relative">
-                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <User size={16} className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${fieldErrors.name ? "text-rose-500" : "text-gray-400"}`} />
                 <input
                   type="text"
                   required
                   placeholder="e.g. Rahul Sharma"
                   value={clientDetails.name}
-                  onChange={(e) => setClientDetails({ ...clientDetails, name: e.target.value })}
-                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  className={`w-full bg-white rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none shadow-2xs font-medium transition-colors ${
+                    fieldErrors.name
+                      ? "border-2 border-rose-500 bg-rose-50/20 focus:border-rose-600"
+                      : "border border-gray-300 focus:border-amber-500"
+                  }`}
                 />
               </div>
+              {fieldErrors.name && (
+                <p className="text-xs font-bold text-rose-600 mt-1 flex items-center gap-1">
+                  <AlertCircle size={13} className="shrink-0" /> {fieldErrors.name}
+                </p>
+              )}
             </div>
 
+            {/* Phone & Email Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Phone Number Input */}
               <div>
-                <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">
+                  Phone Number <span className="text-rose-600 font-bold">* Mandatory</span>
+                </label>
                 <div className="relative">
-                  <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Phone size={16} className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${fieldErrors.phone ? "text-rose-500" : "text-gray-400"}`} />
                   <input
                     type="tel"
                     required
                     placeholder="+91 98765 43210"
                     value={clientDetails.phone}
-                    onChange={(e) => setClientDetails({ ...clientDetails, phone: e.target.value })}
-                    className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    className={`w-full bg-white rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none shadow-2xs font-medium transition-colors ${
+                      fieldErrors.phone
+                        ? "border-2 border-rose-500 bg-rose-50/20 focus:border-rose-600"
+                        : "border border-gray-300 focus:border-amber-500"
+                    }`}
                   />
                 </div>
+                {fieldErrors.phone && (
+                  <p className="text-xs font-bold text-rose-600 mt-1 flex items-center gap-1">
+                    <AlertCircle size={13} className="shrink-0" /> {fieldErrors.phone}
+                  </p>
+                )}
               </div>
 
+              {/* Email Address Input */}
               <div>
-                <label className="block text-xs font-bold text-gray-900 mb-1">Email Address</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">
+                  Email Address <span className="text-rose-600 font-bold">* Mandatory</span>
+                </label>
                 <div className="relative">
-                  <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Mail size={16} className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${fieldErrors.email ? "text-rose-500" : "text-gray-400"}`} />
                   <input
                     type="email"
+                    required
                     placeholder="name@example.com"
                     value={clientDetails.email}
-                    onChange={(e) => setClientDetails({ ...clientDetails, email: e.target.value })}
-                    className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className={`w-full bg-white rounded-xl pl-10 pr-3 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none shadow-2xs font-medium transition-colors ${
+                      fieldErrors.email
+                        ? "border-2 border-rose-500 bg-rose-50/20 focus:border-rose-600"
+                        : "border border-gray-300 focus:border-amber-500"
+                    }`}
                   />
                 </div>
+                {fieldErrors.email && (
+                  <p className="text-xs font-bold text-rose-600 mt-1 flex items-center gap-1">
+                    <AlertCircle size={13} className="shrink-0" /> {fieldErrors.email}
+                  </p>
+                )}
               </div>
             </div>
 
+            {/* Special Requests */}
             <div>
               <label className="block text-xs font-bold text-gray-900 mb-1">Special Requests / Notes (Optional)</label>
               <textarea
                 rows={3}
                 placeholder="Let us know if you have sensitive skin, allergies, or any custom preferences..."
                 value={clientDetails.notes}
-                onChange={(e) => setClientDetails({ ...clientDetails, notes: e.target.value })}
+                onChange={(e) => handleInputChange("notes", e.target.value)}
                 className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
@@ -412,6 +508,10 @@ export const AppointmentForm = () => {
               <div className="flex justify-between">
                 <span className="text-gray-500">Contact:</span>
                 <span className="font-semibold text-gray-900">{lastConfirmedBooking.clientPhone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Email:</span>
+                <span className="font-semibold text-gray-900">{lastConfirmedBooking.clientEmail}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Service:</span>

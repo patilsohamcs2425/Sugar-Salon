@@ -61,8 +61,15 @@ export const BookingProvider = ({ children }) => {
   };
 
   const confirmBooking = async () => {
-    if (!selectedService || !selectedDate || !selectedTimeSlot || !clientDetails.name) {
-      return null;
+    if (
+      !selectedService ||
+      !selectedDate ||
+      !selectedTimeSlot ||
+      !clientDetails.name.trim() ||
+      !clientDetails.phone.trim() ||
+      !clientDetails.email.trim()
+    ) {
+      throw new Error("Name, Phone Number, and Email Address are all mandatory.");
     }
 
     const totalPrice =
