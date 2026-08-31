@@ -16,44 +16,44 @@ export const OfferCard = ({ offer }) => {
 
   return (
     <div
-      className={`relative glass-panel rounded-3xl p-6 md:p-8 border ${offer.borderAccent} bg-gradient-to-br ${offer.bgGradient} shadow-xl flex flex-col justify-between overflow-hidden group`}
+      className="relative bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-2xs hover:shadow-lg hover:border-amber-300 transition-all duration-300 flex flex-col justify-between overflow-hidden group"
     >
       <div className="flex items-center justify-between mb-4">
-        <Badge variant="gold">{offer.badge}</Badge>
-        <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
-          <Tag size={14} className="text-pink-400" />
+        <Badge variant="gold">{offer.badge || "Special Offer"}</Badge>
+        <span className="text-xs font-bold text-gray-500 flex items-center gap-1">
+          <Tag size={13} className="text-amber-600" />
           {offer.expiry}
         </span>
       </div>
 
       <div className="mb-6">
-        <span className="text-4xl font-extrabold font-serif-heading text-pink-400 block mb-1">
+        <span className="text-3xl sm:text-4xl font-extrabold font-serif-heading text-amber-800 block mb-1">
           {offer.discount}
         </span>
-        <h3 className="text-2xl font-bold text-slate-100 mb-2">
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           {offer.title}
         </h3>
-        <p className="text-slate-300 text-sm leading-relaxed">
+        <p className="text-gray-600 text-sm leading-relaxed">
           {offer.description}
         </p>
       </div>
 
-      <div className="pt-4 border-t border-slate-700/50 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-2xl border border-slate-700">
-          <span className="text-xs text-slate-400 uppercase tracking-widest">Code:</span>
-          <span className="font-mono font-bold text-amber-300 text-sm tracking-wider">
+      <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex items-center justify-between sm:justify-start gap-2 bg-gray-50 px-3.5 py-2 rounded-xl border border-gray-200">
+          <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Code:</span>
+          <span className="font-mono font-extrabold text-amber-900 text-sm tracking-wider">
             {offer.code}
           </span>
           <button
             onClick={handleCopyCode}
-            className="ml-2 text-slate-400 hover:text-pink-400 transition-colors cursor-pointer"
+            className="ml-2 text-gray-500 hover:text-amber-800 transition-colors cursor-pointer"
             title="Copy Code"
           >
-            {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+            {copied ? <Check size={16} className="text-emerald-600 font-bold" /> : <Copy size={16} />}
           </button>
         </div>
 
-        <Button variant="gold" size="sm" onClick={() => navigate("/appointment")}>
+        <Button variant="primary" size="sm" onClick={() => navigate("/appointment")}>
           Claim Deal
         </Button>
       </div>

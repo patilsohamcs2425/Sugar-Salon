@@ -39,15 +39,15 @@ export const FeedbackForm = ({ onReviewAdded }) => {
 
   if (submitted) {
     return (
-      <div className="glass-panel rounded-3xl p-8 text-center border border-[#D4AF37]/35 bg-white text-[#221A20] shadow-xl">
+      <div className="bg-white rounded-3xl p-8 text-center border border-gray-200 text-gray-900 shadow-sm">
         <CheckCircle size={40} className="text-emerald-600 mx-auto mb-3" />
-        <h4 className="text-xl font-bold font-serif-heading text-[#221A20] mb-2">
+        <h4 className="text-xl font-bold font-serif-heading text-gray-900 mb-2">
           Thank You for Your Review!
         </h4>
-        <p className="text-xs text-[#665761] mb-4 font-medium">
+        <p className="text-xs text-gray-500 mb-4 font-normal">
           Your feedback has been saved and is visible live on our website!
         </p>
-        <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
+        <Button variant="secondary" size="sm" onClick={() => setSubmitted(false)}>
           Submit Another Review
         </Button>
       </div>
@@ -55,36 +55,36 @@ export const FeedbackForm = ({ onReviewAdded }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4 border border-[#D4AF37]/35 bg-white text-[#221A20] shadow-xl">
-      <h3 className="text-xl font-bold font-serif-heading text-[#221A20] mb-1">
+    <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 md:p-8 space-y-4 border border-gray-200 text-gray-900 shadow-2xs">
+      <h3 className="text-xl font-bold font-serif-heading text-gray-900 mb-1">
         Share Your Experience
       </h3>
-      <p className="text-xs text-[#665761] mb-4 font-medium">Loved your treatment? Leave a rating & review stored on our website!</p>
+      <p className="text-xs text-gray-500 mb-4 font-normal">Loved your treatment? Leave a rating & review stored on our website!</p>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Name *</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Your Name *</label>
         <input
           type="text"
           required
           placeholder="e.g. Maria Sharapova"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Treatment Experienced</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Treatment Experienced</label>
         <input
           type="text"
           value={service}
           onChange={(e) => setService(e.target.value)}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-2">Star Rating</label>
+        <label className="block text-xs font-bold text-gray-900 mb-2">Star Rating</label>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -98,7 +98,7 @@ export const FeedbackForm = ({ onReviewAdded }) => {
                 className={`${
                   star <= rating
                     ? "fill-amber-500 text-amber-500"
-                    : "text-slate-300"
+                    : "text-gray-300"
                 }`}
               />
             </button>
@@ -108,14 +108,14 @@ export const FeedbackForm = ({ onReviewAdded }) => {
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Review *</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Your Review *</label>
         <textarea
           required
           rows={3}
           placeholder="How did your skin feel? What did you love about your treatment?..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
         />
       </div>
 

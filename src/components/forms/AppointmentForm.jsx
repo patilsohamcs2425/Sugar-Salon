@@ -70,20 +70,22 @@ export const AppointmentForm = () => {
     }
   };
 
+  const isConfirmed = bookingStep >= 4 || Boolean(lastConfirmedBooking);
+
   return (
-    <div className="max-w-4xl mx-auto glass-panel rounded-3xl p-6 md:p-10 border border-[#D4AF37]/35 shadow-xl bg-white text-[#221A20]">
+    <div className="max-w-4xl mx-auto bg-white rounded-3xl p-6 md:p-10 border border-gray-200 shadow-sm text-gray-900">
       {/* Step Indicator */}
-      {bookingStep < 4 && (
+      {!isConfirmed && (
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4 text-xs font-bold text-[#665761]">
-            <span className={bookingStep >= 1 ? "text-amber-900 font-extrabold" : ""}>1. Service</span>
+          <div className="flex items-center justify-between mb-3 text-xs font-bold text-gray-500">
+            <span className={bookingStep >= 1 ? "text-amber-900 font-extrabold" : ""}>1. Service & Addons</span>
             <span className={bookingStep >= 2 ? "text-amber-900 font-extrabold" : ""}>2. Date & Time</span>
             <span className={bookingStep >= 3 ? "text-amber-900 font-extrabold" : ""}>3. Guest Details</span>
           </div>
 
-          <div className="w-full bg-[#FAF6F0] rounded-full h-2 overflow-hidden border border-[#D4AF37]/30">
+          <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden border border-gray-200">
             <div
-              className="bg-gradient-to-r from-amber-500 to-amber-700 h-full transition-all duration-500 rounded-full"
+              className="bg-amber-600 h-full transition-all duration-300 rounded-full"
               style={{ width: `${(bookingStep / 3) * 100}%` }}
             />
           </div>
@@ -91,7 +93,7 @@ export const AppointmentForm = () => {
       )}
 
       {formError && (
-        <div className="mb-6 p-3 rounded-2xl bg-rose-50 border border-rose-300 text-rose-700 text-xs font-bold">
+        <div className="mb-6 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold">
           {formError}
         </div>
       )}
@@ -99,10 +101,10 @@ export const AppointmentForm = () => {
       {/* Step 1: Select Service */}
       {bookingStep === 1 && (
         <div>
-          <h3 className="text-2xl font-bold font-serif-heading text-[#221A20] mb-2">
+          <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
             Select Service & Add-ons
           </h3>
-          <p className="text-[#665761] text-sm mb-6 font-medium">Choose your primary treatment experience</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">Choose your primary treatment experience</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {MOCK_SERVICES.map((service) => {
@@ -113,28 +115,28 @@ export const AppointmentForm = () => {
                   onClick={() => setSelectedService(service)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                     isSelected
-                      ? "bg-amber-500/15 border-amber-500 shadow-md shadow-amber-500/10"
-                      : "bg-[#FAF6F0] border-[#D4AF37]/30 hover:border-amber-400"
+                      ? "bg-amber-50/80 border-amber-500 shadow-xs"
+                      : "bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="w-14 h-14 rounded-xl object-cover border border-[#D4AF37]/30"
+                      className="w-14 h-14 rounded-xl object-cover border border-gray-200"
                     />
                     <div>
-                      <h4 className="text-sm font-bold text-[#221A20]">{service.title}</h4>
-                      <span className="text-xs font-bold text-[#8C6B23]">{formatCurrency(service.price)}</span>
+                      <h4 className="text-sm font-bold text-gray-900">{service.title}</h4>
+                      <span className="text-xs font-extrabold text-amber-900">{formatCurrency(service.price)}</span>
                     </div>
                   </div>
-                  {isSelected && <CheckCircle2 className="text-amber-700" size={20} />}
+                  {isSelected && <CheckCircle2 className="text-amber-600" size={22} />}
                 </div>
               );
             })}
           </div>
 
-          <h4 className="text-sm font-bold text-[#221A20] mb-3">Custom Add-on Enhancements</h4>
+          <h4 className="text-sm font-bold text-gray-900 mb-3">Custom Add-on Enhancements</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
             {ADDONS.map((addon) => {
               const isAddonSelected = selectedAddons.some((a) => a.id === addon.id);
@@ -144,8 +146,8 @@ export const AppointmentForm = () => {
                   onClick={() => toggleAddon(addon)}
                   className={`p-3 rounded-xl border text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
                     isAddonSelected
-                      ? "bg-amber-500/15 border-amber-500 text-amber-900"
-                      : "bg-white border-[#D4AF37]/30 text-[#221A20] hover:border-amber-400"
+                      ? "bg-amber-50 border-amber-500 text-amber-900"
+                      : "bg-white border-gray-200 text-gray-800 hover:border-gray-300"
                   }`}
                 >
                   <span>{addon.title}</span>
@@ -160,25 +162,25 @@ export const AppointmentForm = () => {
       {/* Step 2: Date & Time */}
       {bookingStep === 2 && (
         <div>
-          <h3 className="text-2xl font-bold font-serif-heading text-[#221A20] mb-2">
+          <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
             Choose Preferred Date & Time
           </h3>
-          <p className="text-[#665761] text-sm mb-6 font-medium">Select your salon visit slot</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">Select your salon visit slot</p>
 
           <div className="space-y-6 mb-8">
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-2">Preferred Appointment Date</label>
+              <label className="block text-xs font-bold text-gray-900 mb-2">Preferred Appointment Date</label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
-                className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] font-bold focus:border-amber-500 focus:outline-none shadow-sm"
+                className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 font-bold focus:border-amber-500 focus:outline-none shadow-2xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-2">Available Time Slots</label>
+              <label className="block text-xs font-bold text-gray-900 mb-2">Available Time Slots</label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {TIME_SLOTS.map((slot) => {
                   const isSelected = selectedTimeSlot === slot;
@@ -187,10 +189,10 @@ export const AppointmentForm = () => {
                       key={slot}
                       type="button"
                       onClick={() => setSelectedTimeSlot(slot)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white border-amber-400 shadow-md"
-                          : "bg-white border-[#D4AF37]/30 text-[#221A20] hover:border-amber-400"
+                          ? "bg-amber-600 text-white border-amber-600 shadow-xs"
+                          : "bg-white border-gray-200 text-gray-800 hover:border-gray-300"
                       }`}
                     >
                       {slot}
@@ -206,85 +208,85 @@ export const AppointmentForm = () => {
       {/* Step 3: Client Info */}
       {bookingStep === 3 && (
         <div>
-          <h3 className="text-2xl font-bold font-serif-heading text-[#221A20] mb-2">
+          <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-1.5">
             Guest Details & Notes
           </h3>
-          <p className="text-[#665761] text-sm mb-6 font-medium">Provide contact information for instant confirmation</p>
+          <p className="text-gray-500 text-sm mb-6 font-normal">Provide contact information for instant digital pass</p>
 
           <div className="space-y-4 mb-6">
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Full Name *</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Full Name *</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Sophia Williams"
                 value={clientDetails.name}
                 onChange={(e) => setClientDetails({ ...clientDetails, name: e.target.value })}
-                className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+                className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Email Address *</label>
                 <input
                   type="email"
                   required
                   placeholder="sophia@example.com"
                   value={clientDetails.email}
                   onChange={(e) => setClientDetails({ ...clientDetails, email: e.target.value })}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[#221A20] mb-1">Phone Number *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number *</label>
                 <input
                   type="tel"
                   required
                   placeholder="+91 98765 43210"
                   value={clientDetails.phone}
                   onChange={(e) => setClientDetails({ ...clientDetails, phone: e.target.value })}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Special Requests / Allergies</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Special Requests / Allergies</label>
               <textarea
                 rows={3}
                 placeholder="Tell us about skin sensitivities, preferred hair products, or occasion..."
                 value={clientDetails.notes}
                 onChange={(e) => setClientDetails({ ...clientDetails, notes: e.target.value })}
-                className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+                className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
           </div>
         </div>
       )}
 
-      {/* Step 4: Booking Confirmation & Digital Pass */}
-      {bookingStep === 4 && lastConfirmedBooking && (
+      {/* Step 4+: Booking Confirmation & Digital Pass */}
+      {isConfirmed && lastConfirmedBooking && (
         <div className="text-center py-4 space-y-6">
-          <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-700 border border-emerald-500/40 flex items-center justify-center mx-auto mb-2">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto mb-2 shadow-xs">
             <CheckCircle2 size={36} />
           </div>
-          <h3 className="text-2xl font-bold font-serif-heading text-[#221A20]">
+          <h3 className="text-2xl sm:text-3xl font-bold font-serif-heading text-gray-900">
             Appointment Confirmed!
           </h3>
-          <p className="text-xs text-[#665761]">
-            Booking Pass ID: <span className="font-bold text-[#8C6B23]">{lastConfirmedBooking.id}</span>
+          <p className="text-xs text-gray-500">
+            Booking Pass ID: <span className="font-bold text-amber-900">{lastConfirmedBooking.id}</span>
           </p>
 
-          <div className="bg-[#FAF6F0] p-6 rounded-2xl border border-[#D4AF37]/30 inline-block text-center shadow-md">
-            <div className="p-3 bg-white rounded-xl inline-block border border-[#D4AF37]/30 shadow-inner mb-3">
+          <div className="bg-gray-50 p-6 sm:p-8 rounded-3xl border border-gray-200 inline-block text-center shadow-xs">
+            <div className="p-3 bg-white rounded-2xl inline-block border border-gray-200 shadow-xs mb-3">
               <QRCode value={`SUGAR-SALON-${lastConfirmedBooking.id}`} size={140} />
             </div>
-            <p className="text-xs font-bold text-[#221A20]">Present QR Code at Reception</p>
-            <p className="text-[11px] text-[#665761]">{lastConfirmedBooking.date} at {lastConfirmedBooking.timeSlot}</p>
+            <p className="text-xs font-bold text-gray-900">Present QR Code at Reception</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">{lastConfirmedBooking.date} at {lastConfirmedBooking.timeSlot}</p>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-2">
             <Button variant="secondary" size="md" onClick={resetBooking}>
               Book Another Treatment
             </Button>
@@ -293,11 +295,11 @@ export const AppointmentForm = () => {
       )}
 
       {/* Navigation Footer */}
-      {bookingStep < 4 && (
-        <div className="flex items-center justify-between pt-6 border-t border-[#D4AF37]/20">
+      {!isConfirmed && (
+        <div className="flex items-center justify-between pt-6 border-t border-gray-100">
           {bookingStep > 1 ? (
             <Button variant="ghost" size="sm" onClick={handlePrev}>
-              <ArrowLeft size={16} className="mr-1" /> Back
+              <ArrowLeft size={16} className="mr-1 text-amber-700" /> Back
             </Button>
           ) : <div />}
 

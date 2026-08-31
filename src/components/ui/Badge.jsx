@@ -1,17 +1,18 @@
 import React from "react";
 
-export const Badge = ({ children, variant = "pink", className = "" }) => {
+export const Badge = ({ children, variant = "gold", className = "" }) => {
   const variants = {
-    pink: "bg-pink-500/10 text-pink-400 border border-pink-500/30",
-    gold: "bg-amber-500/10 text-amber-300 border border-amber-500/30",
-    purple: "bg-purple-500/10 text-purple-300 border border-purple-500/30",
-    emerald: "bg-emerald-500/10 text-emerald-300 border border-emerald-500/30",
-    slate: "bg-slate-800 text-slate-300 border border-slate-700"
+    gold: "bg-amber-50 text-amber-900 border border-amber-300/60 font-bold",
+    pink: "bg-pink-50 text-pink-900 border border-pink-200 font-bold",
+    purple: "bg-purple-50 text-purple-900 border border-purple-200 font-bold",
+    emerald: "bg-emerald-50 text-emerald-900 border border-emerald-200 font-bold",
+    slate: "bg-gray-100 text-gray-800 border border-gray-200 font-bold",
+    dark: "bg-gray-900 text-white font-bold"
   };
 
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase backdrop-blur-md ${variants[variant]} ${className}`}
+      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] tracking-wider uppercase shadow-xs ${variants[variant] || variants.gold} ${className}`}
     >
       {children}
     </span>

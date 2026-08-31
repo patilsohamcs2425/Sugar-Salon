@@ -46,14 +46,14 @@ export const MobileBottomBar = () => {
     },
     {
       id: "book",
-      label: "Book Now",
+      label: "Book",
       path: "/appointment",
       icon: Calendar,
       isPrimary: true
     },
     {
       id: "call",
-      label: "Call Us",
+      label: "Call",
       href: `tel:${SALON_INFO.phone.replace(/\s+/g, "")}`,
       icon: Phone
     },
@@ -67,7 +67,7 @@ export const MobileBottomBar = () => {
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#FFFDF9]/95 backdrop-blur-xl border-t border-[#D4AF37]/35 px-2 py-1.5 shadow-[0_-8px_30px_rgba(184,142,43,0.12)] pb-safe transition-all duration-300">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-gray-200 px-2 py-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] pb-safe transition-all duration-300">
       <div className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -78,12 +78,12 @@ export const MobileBottomBar = () => {
               <button
                 key={item.id}
                 onClick={handleBookClick}
-                className="flex flex-col items-center group -mt-3 cursor-pointer"
+                className="flex flex-col items-center group -mt-3.5 cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 flex items-center justify-center text-white shadow-lg shadow-amber-600/30 border border-amber-300 active:scale-95 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-amber-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-amber-600/30 border border-amber-300 active:scale-95 transition-transform">
                   <Icon size={22} className="stroke-[2.5]" />
                 </div>
-                <span className="text-[10px] font-extrabold text-amber-900 mt-1">
+                <span className="text-[10px] font-extrabold text-amber-900 mt-0.5">
                   {item.label}
                 </span>
               </button>
@@ -95,10 +95,10 @@ export const MobileBottomBar = () => {
               <a
                 key={item.id}
                 href={item.href}
-                className="flex flex-col items-center py-1 px-2 rounded-xl text-[#5C4D56] hover:text-[#8C6B23] transition-colors"
+                className="flex flex-col items-center py-1 px-2 rounded-xl text-gray-600 hover:text-amber-800 transition-colors"
               >
-                <Icon size={20} />
-                <span className="text-[10px] font-semibold mt-1">{item.label}</span>
+                <Icon size={19} />
+                <span className="text-[10px] font-bold mt-0.5">{item.label}</span>
               </a>
             );
           }
@@ -108,10 +108,10 @@ export const MobileBottomBar = () => {
               <button
                 key={item.id}
                 onClick={item.onClick}
-                className="flex flex-col items-center py-1 px-2 rounded-xl text-[#5C4D56] hover:text-[#8C6B23] transition-colors cursor-pointer"
+                className="flex flex-col items-center py-1 px-2 rounded-xl text-gray-600 hover:text-amber-800 transition-colors cursor-pointer"
               >
-                <Icon size={20} />
-                <span className="text-[10px] font-semibold mt-1">{item.label}</span>
+                <Icon size={19} />
+                <span className="text-[10px] font-bold mt-0.5">{item.label}</span>
               </button>
             );
           }
@@ -122,12 +122,12 @@ export const MobileBottomBar = () => {
               to={item.path}
               className={`flex flex-col items-center py-1 px-2 rounded-xl transition-colors ${
                 isActive
-                  ? "text-amber-900 font-bold"
-                  : "text-[#5C4D56] hover:text-[#221A20]"
+                  ? "text-amber-800 font-extrabold"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              <Icon size={20} className={isActive ? "text-[#8C6B23]" : ""} />
-              <span className="text-[10px] font-semibold mt-1">{item.label}</span>
+              <Icon size={19} className={isActive ? "text-amber-700" : ""} />
+              <span className="text-[10px] font-bold mt-0.5">{item.label}</span>
             </Link>
           );
         })}

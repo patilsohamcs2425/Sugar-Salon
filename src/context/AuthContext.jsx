@@ -147,15 +147,24 @@ export const AuthProvider = ({ children }) => {
     if (isFirebaseConfigured && auth && googleProvider) {
       try {
         const res = await signInWithPopup(auth, googleProvider);
-        toast.success(`Signed in with Google as ${res.user.displayName}!`);
+        toast.success(`Signed in with Google as ${res.user.displayName || "User"}!`);
         closeAuthModal();
         return res.user;
       } catch (err) {
-        toast.error(`Google Sign-In failed: ${err.message}`);
+        console.error("Firebase Google Sign-In error:", err);
+        if (err.code === "auth/popup-closed-by-user") {
+          toast.error("Google sign-in popup was closed before completing.");
+        } else if (err.code === "auth/unauthorized-domain") {
+          toast.error("Domain not authorized in Firebase Console (check Authorized Domains).");
+        } else if (err.code === "auth/operation-not-allowed") {
+          toast.error("Google Sign-In is not enabled in Firebase Console (Authentication > Sign-in method).");
+        } else {
+          toast.error(`Google Sign-In failed: ${err.message}`);
+        }
         throw err;
       }
     } else {
-      loginAsClient("Google User", "google.user@example.com");
+      toast.error("Firebase is not connected. Please check .env credentials and restart the dev server.");
     }
   };
 

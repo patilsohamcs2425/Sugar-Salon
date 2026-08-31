@@ -48,29 +48,29 @@ export const AuthModal = () => {
       title="Sugar Salon Guest Portal"
       maxWidth="max-w-md"
     >
-      <div className="space-y-5 text-[#221A20]">
+      <div className="space-y-5 text-gray-900">
         {/* Security Indicator */}
-        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-amber-500/10 border border-[#D4AF37]/40 text-xs text-amber-900 font-bold">
+        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-bold">
           <span className="flex items-center gap-1.5 font-bold">
             <Lock size={14} className="text-amber-700" /> Member Account Access
           </span>
-          <span className="text-[10px] bg-white px-2 py-0.5 rounded-full border border-[#D4AF37]/30 font-bold text-amber-900 shadow-sm">
+          <span className="text-[10px] bg-white px-2 py-0.5 rounded-full border border-amber-200 font-bold text-amber-900 shadow-2xs">
             Encrypted Session
           </span>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-2 gap-1 p-1 bg-[#FAF6F0] rounded-2xl border border-[#D4AF37]/30">
+        <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-2xl border border-gray-200">
           <button
             type="button"
             onClick={() => {
               setAuthModalTab("login");
               setErrorMsg("");
             }}
-            className={`py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               authModalTab === "login"
-                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md"
-                : "text-[#5C4D56] hover:text-[#221A20]"
+                ? "bg-amber-600 text-white shadow-xs"
+                : "text-gray-600 hover:text-gray-900"
             }`}
           >
             Sign In
@@ -81,10 +81,10 @@ export const AuthModal = () => {
               setAuthModalTab("register");
               setErrorMsg("");
             }}
-            className={`py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               authModalTab === "register"
-                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md"
-                : "text-[#5C4D56] hover:text-[#221A20]"
+                ? "bg-amber-600 text-white shadow-xs"
+                : "text-gray-600 hover:text-gray-900"
             }`}
           >
             Create Account
@@ -92,7 +92,7 @@ export const AuthModal = () => {
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-50 border border-rose-300 text-rose-700 text-xs font-bold">
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold">
             {errorMsg}
           </div>
         )}
@@ -101,31 +101,31 @@ export const AuthModal = () => {
         {authModalTab === "login" ? (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Email Address</label>
               <div className="relative">
-                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="email"
                   required
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2.5 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Password</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Password</label>
               <div className="relative">
-                <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2.5 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
@@ -138,60 +138,60 @@ export const AuthModal = () => {
           /* Sign Up Tab */
           <form onSubmit={handleRegisterSubmit} className="space-y-3">
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Full Name *</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Full Name *</label>
               <div className="relative">
-                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   required
                   placeholder="e.g. Shraddha Parab"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address *</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Email Address *</label>
               <div className="relative">
-                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="email"
                   required
                   placeholder="shraddha@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Phone Number</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number</label>
               <div className="relative">
-                <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="tel"
                   placeholder="098200 12345"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#221A20] mb-1">Password *</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Password *</label>
               <div className="relative">
-                <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-white border border-[#D4AF37]/40 rounded-xl pl-10 pr-3 py-2 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
@@ -203,9 +203,9 @@ export const AuthModal = () => {
         )}
 
         {/* Divider & Google Auth */}
-        <div className="pt-2 border-t border-[#D4AF37]/20 space-y-3">
+        <div className="pt-2 border-t border-gray-100 space-y-3">
           <div className="relative flex items-center justify-center">
-            <span className="bg-[#FFFDF9] px-2 text-[10px] uppercase font-bold text-[#756570] tracking-wider">
+            <span className="bg-white px-2 text-[10px] uppercase font-bold text-gray-400 tracking-wider">
               Or Connect With
             </span>
           </div>
@@ -213,9 +213,9 @@ export const AuthModal = () => {
           <button
             type="button"
             onClick={loginWithGoogle}
-            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-amber-50/50 border border-[#D4AF37]/40 rounded-xl py-2.5 text-xs font-bold text-[#221A20] transition-all cursor-pointer shadow-sm"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl py-2.5 text-xs font-bold text-gray-800 transition-all cursor-pointer shadow-2xs"
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

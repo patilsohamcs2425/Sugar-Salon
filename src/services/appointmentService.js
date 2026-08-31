@@ -1,5 +1,5 @@
 import { db, isFirebaseConfigured } from "../firebase/config";
-import { collection, getDocs, doc, setDoc, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, doc, setDoc, updateDoc, query, orderBy, onSnapshot } from "firebase/firestore";
 import { MOCK_SERVICES, INITIAL_APPOINTMENTS } from "../data/mockData";
 import { getStoredItem, setStoredItem, generateAppointmentId } from "../utils/formatters";
 

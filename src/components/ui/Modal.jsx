@@ -23,12 +23,12 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = "max-w-2xl"
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fadeIn">
       <div
-        className={`relative w-full ${maxWidth} bg-[#FFFDF9] rounded-3xl p-6 md:p-8 border border-[#D4AF37]/35 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col text-[#221A20]`}
+        className={`relative w-full ${maxWidth} bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col text-gray-900`}
       >
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#D4AF37]/25">
-          <h3 className="text-xl font-bold font-serif-heading text-[#221A20]">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
+          <h3 className="text-xl font-bold font-serif-heading text-gray-900">
             {title}
           </h3>
           <button
@@ -38,13 +38,13 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = "max-w-2xl"
               onClose();
             }}
             aria-label="Close dialog"
-            className="p-2 text-[#221A20] bg-[#FAF6F0] hover:bg-amber-100 hover:text-amber-900 border border-[#D4AF37]/40 rounded-full transition-all active:scale-95 cursor-pointer shadow-sm"
+            className="p-1.5 text-gray-500 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-full transition-all active:scale-95 cursor-pointer"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        <div className="overflow-y-auto flex-1 pr-1 custom-scrollbar">
+        <div className="overflow-y-auto flex-1 pr-1">
           {children}
         </div>
       </div>

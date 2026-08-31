@@ -12,61 +12,55 @@ export const AboutSection = ({ showCta = true, className = "" }) => {
       id: "exp",
       icon: Award,
       title: "15+ Years",
-      subtitle: "Of trusted salon experience",
-      accent: "text-amber-800 bg-amber-500/15 border-amber-500/30"
+      subtitle: "Of trusted salon experience in Marol",
+      accent: "text-amber-800 bg-amber-50 border-amber-200"
     },
     {
       id: "stylists",
       icon: Scissors,
       title: "Expert Stylists",
-      subtitle: "Skilled professionals who keep up with modern techniques",
-      accent: "text-pink-800 bg-pink-500/15 border-pink-500/30"
+      subtitle: "Skilled specialists in hair, skin & wax",
+      accent: "text-rose-800 bg-rose-50 border-rose-200"
     },
     {
       id: "care",
       icon: Sparkles,
-      title: "Premium Care",
-      subtitle: "Quality products and personalized attention",
-      accent: "text-amber-900 bg-amber-400/15 border-amber-400/30"
+      title: "100% Organic",
+      subtitle: "Natural sugar paste & clinical hygiene",
+      accent: "text-amber-900 bg-amber-100 border-amber-300"
     }
   ];
 
   return (
     <section className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 ${className}`}>
-      <div className="glass-panel rounded-3xl p-6 sm:p-8 lg:p-12 border border-[#D4AF37]/30 relative overflow-hidden bg-gradient-to-r from-[#FFFDF9] via-[#FAF6F0] to-[#FFFDF9]">
-        {/* Subtle Background Glow Accent */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 shadow-2xs relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           
           {/* Image Column */}
           <div className="lg:col-span-5 w-full">
             <div className="relative group mx-auto max-w-md lg:max-w-none">
-              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-amber-500/20 via-pink-500/20 to-amber-500/20 opacity-70 blur-md group-hover:opacity-100 transition duration-700 pointer-events-none" />
-
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#D4AF37]/40 bg-white shadow-xl">
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200 bg-gray-50 shadow-md">
                 <img
                   src={sugarSalonBrandImg}
                   alt="Sugar Salon Storefront - 15 Years of Beauty & Trust"
                   loading="lazy"
-                  className="w-full h-[260px] sm:h-[340px] lg:h-[400px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-[260px] sm:h-[340px] lg:h-[390px] object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1C151A]/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                 {/* Floating Experience Badge */}
-                <div className="absolute bottom-4 left-4 right-4 glass-panel-light rounded-xl p-3 border border-[#D4AF37]/35 flex items-center justify-between backdrop-blur-md shadow-md">
+                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-xs rounded-xl p-3 border border-gray-200 flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-900 flex items-center justify-center font-serif-heading font-extrabold text-sm">
+                    <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-900 flex items-center justify-center font-serif-heading font-extrabold text-sm border border-amber-300">
                       15
                     </div>
                     <div>
-                      <p className="text-xs font-extrabold text-[#221A20]">Est. 15 Years Ago</p>
-                      <p className="text-[11px] text-[#665761]">Trusted Salon Destination</p>
+                      <p className="text-xs font-extrabold text-gray-900">Est. 15 Years Ago</p>
+                      <p className="text-[11px] text-gray-500 font-medium">Trusted Salon Destination</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-[11px] font-bold text-amber-900 bg-amber-500/15 px-2 py-1 rounded-md border border-[#D4AF37]/40">
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
                     <ShieldCheck size={13} className="text-amber-700" />
                     <span>Verified</span>
                   </div>
@@ -80,39 +74,39 @@ export const AboutSection = ({ showCta = true, className = "" }) => {
             
             {/* Eyebrow */}
             <div className="inline-flex items-center gap-2">
-              <span className="text-xs font-extrabold tracking-widest uppercase text-amber-900 bg-amber-500/15 px-3.5 py-1 rounded-full border border-[#D4AF37]/40">
+              <span className="text-[11px] font-extrabold tracking-wider uppercase text-amber-900 bg-amber-50 px-3.5 py-1 rounded-full border border-amber-200">
                 ESTABLISHED & TRUSTED
               </span>
             </div>
 
             {/* Main Heading */}
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif-heading text-[#221A20] tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif-heading text-gray-900 tracking-tight leading-tight">
               15 Years of <span className="gradient-text-gold">Beauty & Trust</span>
             </h2>
 
             {/* Short Description */}
-            <p className="text-[#5C4D56] text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
-              For 15 years, Sugar Salon has been a trusted destination for beauty, confidence, and exceptional hair care. What began as a passionate dream has grown into a welcoming space where modern style meets personalized service.
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
+              For over 15 years, Sugar Salon has been Marol's premier destination for gentle organic sugar waxing, customized skin glow therapies, and professional unisex styling. Our certified artists ensure pure hygiene and pampering in a serene sanctuary.
             </p>
 
             {/* Three Compact Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               {highlights.map((item) => {
                 const IconComponent = item.icon;
                 return (
                   <div
                     key={item.id}
-                    className="glass-card rounded-2xl p-3.5 border border-[#D4AF37]/25 hover:border-[#D4AF37]/60 transition-all duration-300 flex flex-col justify-between"
+                    className="bg-gray-50/70 rounded-2xl p-3.5 border border-gray-200 hover:border-amber-300 hover:bg-white transition-all duration-200 flex flex-col justify-between"
                   >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${item.accent}`}>
-                        <IconComponent size={16} />
+                    <div className="flex items-center gap-2.5 mb-1.5">
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center border ${item.accent}`}>
+                        <IconComponent size={15} />
                       </div>
-                      <h3 className="text-sm font-bold text-[#221A20] tracking-tight">
+                      <h3 className="text-sm font-bold text-gray-900 tracking-tight">
                         {item.title}
                       </h3>
                     </div>
-                    <p className="text-xs text-[#665761] leading-snug font-medium">
+                    <p className="text-xs text-gray-600 leading-snug font-normal">
                       {item.subtitle}
                     </p>
                   </div>
@@ -130,7 +124,7 @@ export const AboutSection = ({ showCta = true, className = "" }) => {
                   className="group hover:border-amber-500"
                 >
                   <span>Discover Our Story</span>
-                  <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform text-amber-700" />
                 </Button>
               </div>
             )}

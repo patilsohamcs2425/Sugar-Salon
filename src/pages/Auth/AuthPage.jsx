@@ -27,16 +27,14 @@ export const AuthPage = () => {
 
   if (user) {
     return (
-      <div className="max-w-md mx-auto px-4 text-center space-y-6">
-        <div className="glass-panel rounded-3xl p-8 border border-pink-500/30">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-pink-500/40 object-cover"
-          />
-          <h3 className="text-2xl font-bold font-serif-heading text-slate-100">{user.name}</h3>
-          <p className="text-xs text-slate-400 mb-2">{user.email}</p>
-          <span className="inline-block mb-6 px-3 py-1 text-xs font-semibold text-emerald-400 bg-emerald-500/10 rounded-full border border-emerald-500/30">
+      <div className="max-w-md mx-auto px-4 text-center space-y-6 bg-white">
+        <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-md text-gray-900">
+          <div className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-amber-300 bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-xl uppercase">
+            {user.name?.split(" ").map((n) => n[0]).join("").slice(0, 2) || "U"}
+          </div>
+          <h3 className="text-2xl font-bold font-serif-heading text-gray-900">{user.name}</h3>
+          <p className="text-xs text-gray-500 mb-2">{user.email}</p>
+          <span className="inline-block mb-6 px-3 py-1 text-xs font-bold text-emerald-800 bg-emerald-50 rounded-full border border-emerald-200">
             Active Member Session
           </span>
           
@@ -44,7 +42,7 @@ export const AuthPage = () => {
             <Button variant="primary" size="md" className="w-full" onClick={() => navigate("/")}>
               Return to Storefront
             </Button>
-            <Button variant="outline" size="md" className="w-full" onClick={logout}>
+            <Button variant="secondary" size="md" className="w-full" onClick={logout}>
               Sign Out
             </Button>
           </div>
@@ -54,20 +52,20 @@ export const AuthPage = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 space-y-8">
+    <div className="max-w-md mx-auto px-4 space-y-8 text-gray-900 bg-white">
       <SectionHeader
         badge="Guest Portal"
         title={isRegister ? "Join Sugar VIP" : "Welcome Back"}
         subtitle="Sign in to manage your appointments, vouchers, and beauty profile."
       />
 
-      <div className="glass-panel rounded-3xl p-6 md:p-8 border border-slate-800 space-y-6">
+      <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-6">
         {/* Security Indicator */}
-        <div className="flex items-center justify-between p-3 rounded-2xl bg-pink-500/10 border border-pink-500/30 text-xs text-pink-300">
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
           <span className="flex items-center gap-1.5 font-bold">
-            <Lock size={14} className="text-amber-400" /> Member Account Access
+            <Lock size={14} className="text-amber-700" /> Member Account Access
           </span>
-          <span className="text-[10px] bg-slate-900 px-2 py-0.5 rounded-full border border-slate-700 font-semibold text-slate-300">
+          <span className="text-[10px] bg-white px-2 py-0.5 rounded-full border border-amber-200 font-bold text-amber-900 shadow-2xs">
             Encrypted Session
           </span>
         </div>
@@ -75,68 +73,68 @@ export const AuthPage = () => {
         <form onSubmit={handleCustomSubmit} className="space-y-4">
           {isRegister && (
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Full Name</label>
               <div className="relative">
-                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   required
                   placeholder="e.g. Shraddha Parab"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+            <label className="block text-xs font-bold text-gray-900 mb-1">Email Address</label>
             <div className="relative">
-              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="email"
                 required
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
           </div>
 
           {isRegister && (
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
+              <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number</label>
               <div className="relative">
-                <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="tel"
                   placeholder="098200 12345"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+            <label className="block text-xs font-bold text-gray-900 mb-1">Password</label>
             <div className="relative">
-              <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="password"
                 required
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-100 focus:border-pink-500 focus:outline-none"
+                className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
               />
             </div>
           </div>
 
-          <Button type="submit" variant="secondary" size="md" className="w-full">
+          <Button type="submit" variant="primary" size="md" className="w-full">
             {isRegister ? "Create Account" : "Sign In"}
           </Button>
         </form>
@@ -144,7 +142,7 @@ export const AuthPage = () => {
         <div className="text-center pt-2">
           <button
             onClick={() => setIsRegister(!isRegister)}
-            className="text-xs text-pink-400 hover:underline font-medium"
+            className="text-xs text-amber-800 hover:underline font-bold cursor-pointer"
           >
             {isRegister ? "Already have an account? Sign in" : "New to Sugar Salon? Create account"}
           </button>

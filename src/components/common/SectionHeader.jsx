@@ -9,17 +9,17 @@ export const SectionHeader = ({
   className = ""
 }) => {
   return (
-    <div className={`mb-12 ${centered ? "text-center" : "text-left"} ${className}`}>
+    <div className={`mb-10 sm:mb-12 ${centered ? "text-center" : "text-left"} ${className}`}>
       {badge && (
         <div className="mb-3">
           <Badge variant="gold">{badge}</Badge>
         </div>
       )}
-      <h2 className="text-3xl md:text-5xl font-extrabold font-serif-heading text-[#1A1418] tracking-tight mb-4">
+      <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold font-serif-heading text-gray-900 tracking-tight mb-3 sm:mb-4">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-[#4A3E45] font-semibold text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        <p className="text-gray-600 font-normal text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
           {subtitle}
         </p>
       )}

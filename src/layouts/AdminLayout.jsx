@@ -15,17 +15,17 @@ export const AdminLayout = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex">
+    <div className="min-h-screen bg-white text-gray-900 flex">
       {/* Admin Sidebar */}
-      <aside className="w-64 glass-panel border-r border-slate-800 p-6 flex flex-col justify-between hidden md:flex">
+      <aside className="w-64 bg-gray-50 border-r border-gray-200 p-6 flex flex-col justify-between hidden md:flex">
         <div>
-          <div className="flex items-center gap-3 pb-6 border-b border-slate-800 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center font-bold">
+          <div className="flex items-center gap-3 pb-6 border-b border-gray-200 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-bold">
               <ShieldCheck size={22} />
             </div>
             <div>
-              <h3 className="font-bold font-serif-heading text-slate-100 text-sm">Sugar Admin</h3>
-              <p className="text-[10px] text-purple-300">Management Suite</p>
+              <h3 className="font-bold font-serif-heading text-gray-900 text-sm">Sugar Admin</h3>
+              <p className="text-[10px] text-amber-800 font-semibold">Management Suite</p>
             </div>
           </div>
 
@@ -39,8 +39,8 @@ export const AdminLayout = ({ children }) => {
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
                     isActive
-                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                      ? "bg-amber-600 text-white font-bold shadow-2xs"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
                   }`}
                 >
                   <Icon size={16} />
@@ -54,7 +54,7 @@ export const AdminLayout = ({ children }) => {
         <div>
           <Link
             to="/"
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-pink-400 transition-colors p-2"
+            className="flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-amber-800 transition-colors p-2"
           >
             <ArrowLeft size={16} /> Return to Storefront
           </Link>
@@ -62,7 +62,7 @@ export const AdminLayout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto">{children}</main>
+      <main className="flex-1 p-6 md:p-10 overflow-y-auto bg-white">{children}</main>
     </div>
   );
 };

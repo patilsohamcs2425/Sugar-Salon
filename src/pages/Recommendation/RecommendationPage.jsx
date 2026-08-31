@@ -74,31 +74,31 @@ export const RecommendationPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-[#1A1418]">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-gray-900 bg-white">
       <SectionHeader
-        badge="AI Smart Matchmaker"
+        badge="Smart Matchmaker"
         title="Bespoke Beauty Recommendation Finder"
-        subtitle="Answer 3 quick questions and let our aesthetic algorithm formulate your ideal treatment package."
+        subtitle="Answer 3 quick questions to discover your ideal treatment package at Sugar Salon."
       />
 
       {/* Quiz Container */}
-      <div className="glass-panel rounded-3xl p-6 md:p-10 border border-[#D4AF37]/35 shadow-xl bg-white relative overflow-hidden text-[#1A1418]">
+      <div className="bg-white rounded-3xl p-6 md:p-10 border border-gray-200 shadow-sm text-gray-900">
         {currentStep < QUIZ_QUESTIONS.length ? (
           <div>
             {/* Progress */}
-            <div className="flex items-center justify-between mb-4 text-xs font-bold text-[#5C4D56]">
+            <div className="flex items-center justify-between mb-3 text-xs font-bold text-gray-500">
               <span>Question {currentStep + 1} of {QUIZ_QUESTIONS.length}</span>
-              <span className="text-[#8C6B23] font-extrabold">{Math.round(((currentStep + 1) / QUIZ_QUESTIONS.length) * 100)}% Completed</span>
+              <span className="text-amber-900 font-extrabold">{Math.round(((currentStep + 1) / QUIZ_QUESTIONS.length) * 100)}% Completed</span>
             </div>
 
-            <div className="w-full bg-[#FAF6F0] rounded-full h-2 mb-8 border border-[#D4AF37]/30">
+            <div className="w-full bg-gray-100 rounded-full h-2 mb-8 border border-gray-200">
               <div
-                className="bg-gradient-to-r from-amber-500 to-amber-700 h-full transition-all duration-500 rounded-full"
+                className="bg-amber-600 h-full transition-all duration-300 rounded-full"
                 style={{ width: `${((currentStep + 1) / QUIZ_QUESTIONS.length) * 100}%` }}
               />
             </div>
 
-            <h3 className="text-2xl font-extrabold font-serif-heading text-[#1A1418] mb-6">
+            <h3 className="text-2xl font-extrabold font-serif-heading text-gray-900 mb-6">
               {QUIZ_QUESTIONS[currentStep].title}
             </h3>
 
@@ -108,12 +108,12 @@ export const RecommendationPage = () => {
                   key={opt.value}
                   type="button"
                   onClick={() => handleSelectOption(QUIZ_QUESTIONS[currentStep].id, opt.value)}
-                  className="p-5 rounded-2xl bg-white hover:bg-amber-50/80 border border-[#D4AF37]/40 hover:border-amber-500 text-left transition-all duration-300 group flex items-center justify-between shadow-sm cursor-pointer"
+                  className="p-5 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-amber-400 text-left transition-all duration-200 group flex items-center justify-between shadow-2xs cursor-pointer"
                 >
-                  <span className="text-sm font-bold text-[#1A1418] group-hover:text-[#8C6B23]">
+                  <span className="text-sm font-bold text-gray-800 group-hover:text-amber-900">
                     {opt.label}
                   </span>
-                  <ArrowRight size={18} className="text-[#8C6B23] group-hover:translate-x-1 transition-all" />
+                  <ArrowRight size={18} className="text-amber-700 group-hover:translate-x-1 transition-all" />
                 </button>
               ))}
             </div>
@@ -123,28 +123,28 @@ export const RecommendationPage = () => {
           recommendedService && (
             <div className="text-center py-4 space-y-6">
               <Badge variant="gold">Match Result 98.4% Fit</Badge>
-              <h3 className="text-3xl font-extrabold font-serif-heading text-[#1A1418]">
+              <h3 className="text-3xl font-extrabold font-serif-heading text-gray-900">
                 Your Ideal Treatment Match
               </h3>
 
-              <div className="max-w-md mx-auto glass-card rounded-3xl overflow-hidden border border-[#D4AF37]/40 text-left bg-white shadow-xl">
+              <div className="max-w-md mx-auto bg-white rounded-3xl overflow-hidden border border-gray-200 text-left shadow-md">
                 <img
                   src={recommendedService.image}
                   alt={recommendedService.title}
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <h4 className="text-xl font-bold text-[#1A1418] mb-2">
+                  <h4 className="text-xl font-bold text-gray-900 mb-1.5">
                     {recommendedService.title}
                   </h4>
-                  <p className="text-[#4A3E45] font-semibold text-xs leading-relaxed mb-4">
+                  <p className="text-gray-600 text-xs leading-relaxed mb-4 font-normal">
                     {recommendedService.description}
                   </p>
 
-                  <div className="pt-4 border-t border-[#D4AF37]/20 flex items-center justify-between">
+                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-[#5C4D56] uppercase tracking-widest block font-bold">Recommended Package</span>
-                      <span className="text-2xl font-extrabold text-[#8C6B23]">
+                      <span className="text-[10px] text-gray-500 uppercase tracking-wider block font-bold">Recommended Package</span>
+                      <span className="text-2xl font-extrabold text-amber-900">
                         {formatCurrency(recommendedService.price)}
                       </span>
                     </div>
@@ -156,7 +156,7 @@ export const RecommendationPage = () => {
               </div>
 
               <div className="flex justify-center">
-                <Button variant="ghost" size="sm" onClick={handleRestart}>
+                <Button variant="secondary" size="sm" onClick={handleRestart}>
                   <RefreshCw size={14} className="mr-1.5" /> Retake Quiz
                 </Button>
               </div>

@@ -46,16 +46,16 @@ export const ContactForm = () => {
 
   if (submitted) {
     return (
-      <div className="glass-panel rounded-3xl p-8 text-center border border-[#D4AF37]/35 shadow-xl space-y-6 bg-white text-[#221A20] animate-fadeIn">
-        <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-700 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-sm">
+      <div className="bg-white rounded-3xl p-8 text-center border border-gray-200 shadow-sm space-y-6 text-gray-900 animate-fadeIn">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-xs">
           <CheckCircle2 size={36} />
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold font-serif-heading text-[#221A20] mb-2">
+          <h3 className="text-2xl font-bold font-serif-heading text-gray-900 mb-2">
             Inquiry Received Successfully!
           </h3>
-          <p className="text-[#5C4D56] text-sm max-w-md mx-auto leading-relaxed font-normal">
+          <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed font-normal">
             Thank you for contacting Sugar Salon. Our concierge team has received your message and will respond to you promptly.
           </p>
         </div>
@@ -66,21 +66,21 @@ export const ContactForm = () => {
             href={getWhatsAppUrl()}
             target="_blank"
             rel="noreferrer"
-            className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs active:scale-95 transition-all cursor-pointer"
           >
             <MessageSquare size={18} /> Chat on WhatsApp
           </a>
 
           <a
             href={getMailtoUrl()}
-            className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs active:scale-95 transition-all cursor-pointer"
           >
             <Mail size={18} /> Send via Email App
           </a>
         </div>
 
-        <div className="pt-4 border-t border-[#D4AF37]/20">
-          <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
+        <div className="pt-4 border-t border-gray-100">
+          <Button variant="secondary" size="sm" onClick={() => setSubmitted(false)}>
             Send Another Inquiry
           </Button>
         </div>
@@ -89,56 +89,56 @@ export const ContactForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4 border border-[#D4AF37]/35 bg-white text-[#221A20] shadow-xl">
-      <h3 className="text-xl font-bold font-serif-heading text-[#221A20] mb-1">
+    <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 md:p-8 space-y-4 border border-gray-200 text-gray-900 shadow-2xs">
+      <h3 className="text-xl font-bold font-serif-heading text-gray-900 mb-1">
         Direct Concierge Inquiry
       </h3>
-      <p className="text-xs text-[#665761] mb-4 font-medium">
+      <p className="text-xs text-gray-500 mb-4 font-normal">
         Send us your questions or custom requests. Our concierge team is at your service 7 days a week.
       </p>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Full Name *</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Your Full Name *</label>
         <input
           type="text"
           required
           placeholder="e.g. Amanda Vance"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold text-[#221A20] mb-1">Email Address *</label>
+          <label className="block text-xs font-bold text-gray-900 mb-1">Email Address *</label>
           <input
             type="email"
             required
             placeholder="amanda@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+            className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold text-[#221A20] mb-1">Phone Number</label>
+          <label className="block text-xs font-bold text-gray-900 mb-1">Phone Number</label>
           <input
             type="tel"
             placeholder="+91 98765 43210"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+            className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Subject</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Subject</label>
         <select
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] focus:border-amber-500 focus:outline-none shadow-sm font-bold"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 focus:border-amber-500 focus:outline-none shadow-2xs font-bold"
         >
           <option value="General Inquiry">General Inquiry</option>
           <option value="Bridal Package Booking">Bridal Package Booking</option>
@@ -148,14 +148,14 @@ export const ContactForm = () => {
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-[#221A20] mb-1">Your Message *</label>
+        <label className="block text-xs font-bold text-gray-900 mb-1">Your Message *</label>
         <textarea
           required
           rows={4}
-          placeholder="How can our aesthetic team help you today?..."
+          placeholder="How can our team help you today?..."
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          className="w-full bg-white border border-[#D4AF37]/40 rounded-xl p-3 text-sm text-[#221A20] placeholder-[#8A7B85] focus:border-amber-500 focus:outline-none shadow-sm font-medium"
+          className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none shadow-2xs font-medium"
         />
       </div>
 
