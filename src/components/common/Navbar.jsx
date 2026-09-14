@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Calendar, User, LogOut, Sparkles, Phone, MapPin, Clock } from "lucide-react";
+import { Menu, X, Calendar, User, LogOut, Sparkles, Phone, MapPin, Clock, ShieldCheck } from "lucide-react";
 import { NAV_LINKS, SALON_INFO } from "../../constants";
 import { Button } from "../ui/Button";
 import { useAuth } from "../../hooks/useAuth";
@@ -15,7 +15,7 @@ export const Navbar = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout, openAuthModal, requireAuth } = useAuth();
+  const { user, logout, openAuthModal, requireAuth, isAdmin } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,6 +141,17 @@ export const Navbar = () => {
 
           {/* Right CTA Actions */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Direct Admin Suite Option for Admin User */}
+            {user && isAdmin && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all shadow-2xs"
+              >
+                <ShieldCheck size={14} className="text-amber-700" />
+                <span>Admin Suite</span>
+              </Link>
+            )}
+
             {/* User Account Menu */}
             <div className="relative">
               {user ? (
@@ -169,6 +180,16 @@ export const Navbar = () => {
                       {user.tier || "VIP Member"}
                     </span>
                   </div>
+
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="w-full text-left px-3 py-2 text-xs text-amber-900 hover:bg-amber-100/70 rounded-xl transition-colors flex items-center gap-2 font-bold mb-1 border border-amber-200 bg-amber-50"
+                    >
+                      <ShieldCheck size={14} className="text-amber-700" /> Admin Dashboard
+                    </Link>
+                  )}
 
                   <button
                     onClick={() => {
@@ -257,19 +278,31 @@ export const Navbar = () => {
                 </Button>
               </div>
             ) : (
-              <div className="flex items-center justify-between bg-gray-50 p-3 rounded-2xl border border-gray-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-bold text-xs">
-                    {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between bg-gray-50 p-3 rounded-2xl border border-gray-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-bold text-xs">
+                      {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-900">{user.name}</p>
+                      <p className="text-[10px] text-amber-800 font-bold capitalize">{user.tier || "VIP Member"}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-900">{user.name}</p>
-                    <p className="text-[10px] text-amber-800 font-bold capitalize">{user.tier || "VIP Member"}</p>
-                  </div>
+                  <button onClick={logout} className="text-xs text-rose-600 font-bold hover:underline">
+                    Sign Out
+                  </button>
                 </div>
-                <button onClick={logout} className="text-xs text-rose-600 font-bold hover:underline">
-                  Sign Out
-                </button>
+
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    onClick={toggleMobileMenu}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200"
+                  >
+                    <ShieldCheck size={15} className="text-amber-700" /> Executive Admin Dashboard
+                  </Link>
+                )}
               </div>
             )}
 

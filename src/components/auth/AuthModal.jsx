@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal } from "../ui/Modal";
 import { Button } from "../ui/Button";
 import { useAuth } from "../../hooks/useAuth";
 import { Lock, Mail, User, Phone, Key } from "lucide-react";
 
 export const AuthModal = () => {
+  const navigate = useNavigate();
   const {
     isAuthModalOpen,
     closeAuthModal,
@@ -12,7 +14,8 @@ export const AuthModal = () => {
     setAuthModalTab,
     loginWithEmail,
     registerCustomer,
-    loginWithGoogle
+    loginWithGoogle,
+    isEmailAdmin
   } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -20,25 +23,46 @@ export const AuthModal = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       setErrorMsg("Please enter both email address and password.");
       return;
     }
-    loginWithEmail(email, password);
+
+    setIsSubmitting(true);
+    try {
+      await loginWithEmail(email.trim(), password);
+      const cleanEmail = email.trim().toLowerCase();
+      if (isEmailAdmin ? isEmailAdmin(cleanEmail) : cleanEmail === "sugarsalon6@gmail.com") {
+        closeAuthModal();
+        navigate("/admin");
+      }
+    } catch (err) {
+      setErrorMsg(err.message || "Authentication failed. Please check your credentials.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    if (!name || !email || !password) {
+    if (!name.trim() || !email.trim() || !password) {
       setErrorMsg("Please fill out all required fields.");
       return;
     }
-    registerCustomer(name, email, phone, password);
+    setIsSubmitting(true);
+    try {
+      await registerCustomer(name.trim(), email.trim(), phone.trim(), password);
+    } catch (err) {
+      setErrorMsg(err.message || "Registration failed.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

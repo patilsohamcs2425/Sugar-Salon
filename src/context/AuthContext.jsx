@@ -16,6 +16,16 @@ import {
 } from "../utils/jwtHelper";
 import toast from "react-hot-toast";
 
+export const ADMIN_EMAILS = [
+  "sugarsalon6@gmail.com"
+];
+
+export const isEmailAdmin = (email) => {
+  if (!email) return false;
+  const normalized = email.toLowerCase().trim();
+  return ADMIN_EMAILS.includes(normalized) || normalized.includes("admin");
+};
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -33,12 +43,13 @@ export const AuthProvider = ({ children }) => {
         if (fbUser) {
           const idToken = await fbUser.getIdToken();
           setToken(idToken);
+          const isAdminUser = isEmailAdmin(fbUser.email);
           setUser({
             id: fbUser.uid,
-            name: fbUser.displayName || fbUser.email.split("@")[0],
+            name: fbUser.displayName || (isAdminUser ? "Sugar Admin Manager" : fbUser.email.split("@")[0]),
             email: fbUser.email,
-            role: fbUser.email?.includes("admin") ? "admin" : "client",
-            tier: fbUser.email?.includes("admin") ? "Administrator" : "Sugar VIP Member"
+            role: isAdminUser ? "admin" : "client",
+            tier: isAdminUser ? "Administrator" : "Sugar VIP Member"
           });
         } else {
           setUser(null);
@@ -108,12 +119,13 @@ export const AuthProvider = ({ children }) => {
         throw err;
       }
     } else {
+      const isAdminUser = isEmailAdmin(email);
       const clientUser = {
         id: `usr-${Date.now()}`,
-        name: email.split("@")[0].replace(".", " "),
+        name: isAdminUser ? "Sugar Admin Manager" : email.split("@")[0].replace(".", " "),
         email,
-        role: email.includes("admin") ? "admin" : "client",
-        tier: "Sugar VIP Guest"
+        role: isAdminUser ? "admin" : "client",
+        tier: isAdminUser ? "Administrator" : "Sugar VIP Guest"
       };
       setAuthSession(clientUser);
     }
@@ -218,6 +230,8 @@ export const AuthProvider = ({ children }) => {
         token,
         loading,
         isAdmin,
+        isEmailAdmin,
+        ADMIN_EMAILS,
         isFirebaseConfigured,
         loginWithEmail,
         registerCustomer,

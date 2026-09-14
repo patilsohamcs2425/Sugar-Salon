@@ -12,10 +12,29 @@ import { OffersPage } from "../pages/Offers/OffersPage";
 import { ContactPage } from "../pages/Contact/ContactPage";
 import { FeedbackPage } from "../pages/Feedback/FeedbackPage";
 import { AuthPage } from "../pages/Auth/AuthPage";
+import { AdminLayout } from "../layouts/AdminLayout";
+import { AdminDashboard } from "../pages/Admin/AdminDashboard";
+import { AdminRoute } from "./AdminRoute";
+import { Navigate } from "react-router-dom";
 
 export const AppRoutes = () => {
   return (
     <Routes>
+      {/* Fallback legacy login redirect */}
+      <Route path="/admin/login" element={<Navigate to="/" state={{ openLogin: true }} replace />} />
+
+      {/* Admin Protected Suite */}
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          </AdminRoute>
+        }
+      />
+
       {/* Public Storefront Routes wrapped in MainLayout */}
       <Route
         path="/"

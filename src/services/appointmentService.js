@@ -10,9 +10,16 @@ const USER_REVIEWS_STORAGE_KEY = "sugar_salon_user_reviews";
 // Initialize Local Storage Fallback
 export const initLocalStorageData = () => {
   if (!localStorage.getItem(APPOINTMENTS_STORAGE_KEY)) {
-    setStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
+    setStoredItem(APPOINTMENTS_STORAGE_KEY, []);
   }
   setStoredItem(SERVICES_STORAGE_KEY, MOCK_SERVICES);
+};
+
+// Filter helper to ensure no legacy mock items pollute the real customer queue
+const filterRealAppointments = (list) => {
+  if (!Array.isArray(list)) return [];
+  const fakeIds = ["APT-8821", "APT-8822", "APT-8823"];
+  return list.filter((apt) => apt && !fakeIds.includes(apt.id));
 };
 
 // --- APPOINTMENTS ---
@@ -21,16 +28,63 @@ export const getAppointments = async () => {
   if (isFirebaseConfigured && db) {
     try {
       const aptsCol = collection(db, "appointments");
-      const q = query(aptsCol, orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
-      const list = snapshot.docs.map((d) => ({ id: d.id, referenceId: d.id, ...d.data() }));
-      if (list.length > 0) return list;
+      const snapshot = await getDocs(aptsCol);
+      if (!snapshot.empty) {
+        const list = snapshot.docs.map((d) => ({ id: d.id, referenceId: d.id, ...d.data() }));
+        list.sort((a, b) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return timeB - timeA;
+        });
+        const realOnly = filterRealAppointments(list);
+        setStoredItem(APPOINTMENTS_STORAGE_KEY, realOnly);
+        return realOnly;
+      }
     } catch (err) {
-      console.warn("Firestore getAppointments fallback to local:", err.message);
+      console.warn("Firestore getAppointments error, using local queue:", err.message);
     }
   }
   initLocalStorageData();
-  return getStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
+  const localList = getStoredItem(APPOINTMENTS_STORAGE_KEY, []);
+  return filterRealAppointments(localList);
+};
+
+/**
+ * Real-time listener for live customer bookings in Firebase Firestore.
+ */
+export const subscribeToFirebaseAppointments = (onUpdate, onError) => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const aptsCol = collection(db, "appointments");
+      const unsubscribe = onSnapshot(
+        aptsCol,
+        (snapshot) => {
+          const list = snapshot.docs.map((d) => ({ id: d.id, referenceId: d.id, ...d.data() }));
+          list.sort((a, b) => {
+            const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return timeB - timeA;
+          });
+          const realList = filterRealAppointments(list);
+          setStoredItem(APPOINTMENTS_STORAGE_KEY, realList);
+          onUpdate(realList);
+        },
+        (err) => {
+          console.warn("Firestore onSnapshot error for appointments:", err.message);
+          if (onError) onError(err);
+          getAppointments().then(onUpdate);
+        }
+      );
+      return unsubscribe;
+    } catch (err) {
+      console.warn("Error setting up Firestore appointments listener:", err.message);
+      if (onError) onError(err);
+    }
+  }
+
+  // Fallback to local storage
+  getAppointments().then(onUpdate);
+  return () => {};
 };
 
 export const createAppointment = async (appointmentData) => {
@@ -50,14 +104,14 @@ export const createAppointment = async (appointmentData) => {
     try {
       const aptRef = doc(db, "appointments", newAppointment.id);
       await setDoc(aptRef, newAppointment);
-      console.log("Appointment saved to Firebase Firestore:", newAppointment.id);
+      console.log("Real appointment persisted to Firestore:", newAppointment.id);
     } catch (err) {
-      console.warn("Firestore createAppointment error, saving locally:", err.message);
+      console.warn("Firestore setDoc warning, cached locally:", err.message);
     }
   }
 
   initLocalStorageData();
-  const currentList = getStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
+  const currentList = filterRealAppointments(getStoredItem(APPOINTMENTS_STORAGE_KEY, []));
   const updatedList = [newAppointment, ...currentList];
   setStoredItem(APPOINTMENTS_STORAGE_KEY, updatedList);
   return newAppointment;
@@ -73,7 +127,7 @@ export const updateAppointmentStatus = async (id, status) => {
     }
   }
 
-  const currentList = getStoredItem(APPOINTMENTS_STORAGE_KEY, INITIAL_APPOINTMENTS);
+  const currentList = filterRealAppointments(getStoredItem(APPOINTMENTS_STORAGE_KEY, []));
   const updated = currentList.map((apt) => (apt.id === id ? { ...apt, status } : apt));
   setStoredItem(APPOINTMENTS_STORAGE_KEY, updated);
   return updated;
