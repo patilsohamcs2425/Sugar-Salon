@@ -221,6 +221,11 @@ export const AppointmentForm = () => {
                     <img
                       src={service.image}
                       alt={service.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80";
+                      }}
                       className="w-14 h-14 rounded-xl object-cover border border-gray-200"
                     />
                     <div>

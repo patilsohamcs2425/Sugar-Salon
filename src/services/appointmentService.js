@@ -4,7 +4,7 @@ import { MOCK_SERVICES, INITIAL_APPOINTMENTS } from "../data/mockData";
 import { getStoredItem, setStoredItem, generateAppointmentId } from "../utils/formatters";
 
 const APPOINTMENTS_STORAGE_KEY = "sugar_salon_appointments";
-const SERVICES_STORAGE_KEY = "sugar_salon_services";
+const SERVICES_STORAGE_KEY = "sugar_salon_services_v2";
 const USER_REVIEWS_STORAGE_KEY = "sugar_salon_user_reviews";
 
 // Initialize Local Storage Fallback

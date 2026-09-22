@@ -269,7 +269,7 @@ export const HomePage = () => {
               className="rounded-2xl object-cover h-60 w-full border border-gray-200 shadow-md"
             />
             <img
-              src="https://images.unsplash.com/photo-1512290900673-7002ffffff?auto=format&fit=crop&w=600&q=80"
+              src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=600&q=80"
               alt="Hydrating Skin Treatment"
               loading="lazy"
               className="rounded-2xl object-cover h-60 w-full border border-gray-200 shadow-md mt-6"
