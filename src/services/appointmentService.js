@@ -1,6 +1,6 @@
 import { db, isFirebaseConfigured } from "../firebase/config";
-import { collection, getDocs, doc, setDoc, updateDoc, query, orderBy, onSnapshot } from "firebase/firestore";
-import { MOCK_SERVICES, INITIAL_APPOINTMENTS } from "../data/mockData";
+import { collection, getDocs, doc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { MOCK_SERVICES } from "../data/mockData";
 import { getStoredItem, setStoredItem, generateAppointmentId } from "../utils/formatters";
 
 const APPOINTMENTS_STORAGE_KEY = "sugar_salon_appointments";

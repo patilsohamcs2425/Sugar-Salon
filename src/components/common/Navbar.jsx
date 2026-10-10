@@ -38,6 +38,7 @@ export const Navbar = () => {
   };
 
   const handleNavClick = (e, link) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (link.path === "/appointment") {
       e.preventDefault();
       requireAuth(() => {
@@ -49,6 +50,7 @@ export const Navbar = () => {
   const handleBookClick = () => {
     setMobileMenuOpen(false);
     window.dispatchEvent(new CustomEvent("mobileMenuToggle", { detail: { open: false } }));
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     requireAuth(() => {
       navigate("/appointment");
     });

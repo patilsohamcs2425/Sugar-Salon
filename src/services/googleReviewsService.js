@@ -127,7 +127,7 @@ export const fetchGoogleReviews = async () => {
         };
       }
     }
-  } catch (err) {
+  } catch (_err) {
     console.info("Using embedded Google Business Profile data for Sugar Salon Marol.");
   }
 

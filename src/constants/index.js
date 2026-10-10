@@ -22,7 +22,7 @@ export const NAV_LINKS = [
   { name: "Home", path: "/" },
   { name: "About Us", path: "/about" },
   { name: "Services", path: "/services" },
-  { name: "AI Finder", path: "/recommendation", badge: "Smart Quiz" },
+  { name: "AI Assistant", path: "/recommendation", badge: "Beta" },
   { name: "Appointment", path: "/appointment" },
   { name: "Gallery", path: "/gallery" },
   { name: "Feedback", path: "/feedback" },

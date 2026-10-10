@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from "recharts";
 import {
-  DollarSign, Calendar, Users, Star, CheckCircle, Clock, XCircle,
-  Scissors, Plus, ShieldCheck, Sparkles, Search, RefreshCw, Phone, Mail, MessageSquare
+  DollarSign, Calendar, Star, CheckCircle, Clock,
+  Plus, ShieldCheck, Sparkles, Search, RefreshCw, Phone, Mail
 } from "lucide-react";
 import { getAppointments, updateAppointmentStatus, getServices, getReviews, subscribeToFirebaseAppointments } from "../../services/appointmentService";
 import { formatCurrency } from "../../utils/formatters";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
-import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 
 const REVENUE_DATA = [
@@ -32,25 +31,20 @@ const CATEGORY_PIE = [
 ];
 
 export const AdminDashboard = () => {
-  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab");
 
   const [appointments, setAppointments] = useState([]);
   const [services, setServices] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [activeTab, setActiveTab] = useState(tabParam || "appointments");
+  const [internalTab, setInternalTab] = useState("appointments");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (tabParam) {
-      setActiveTab(tabParam);
-    }
-  }, [tabParam]);
+  const activeTab = tabParam || internalTab;
 
   const handleTabChange = (tabName) => {
-    setActiveTab(tabName);
+    setInternalTab(tabName);
     setSearchParams(tabName === "overview" ? {} : { tab: tabName });
   };
 

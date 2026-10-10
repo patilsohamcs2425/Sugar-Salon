@@ -1,8 +1,7 @@
-import React from "react";
 import { SectionHeader } from "../../components/common/SectionHeader";
 import { AppointmentForm } from "../../components/forms/AppointmentForm";
 import { SALON_INFO } from "../../constants";
-import { ShieldCheck, Clock, PhoneCall, CheckCircle2, User, Sparkles } from "lucide-react";
+import { ShieldCheck, Clock, PhoneCall, User, Sparkles } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { Button } from "../../components/ui/Button";
 
